@@ -1,0 +1,8 @@
+# Ignore all compiled object files
+*.o
+
+# Ignore all binary executable files
+*.bin
+
+# Ignore all the zip files
+*.zip
