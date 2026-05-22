@@ -15,7 +15,7 @@ jmp $
 
 
 %include "../print_functions/print_string.asm"
-%include "../diskload.asm"
+%include "diskload.asm"
 %include "../32_bit/switch_to_pm.asm"
 %include "../32_bit/print_text.asm"
 %include "../32_bit/gdt_table.asm"
