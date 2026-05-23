@@ -14,6 +14,7 @@ section .bss
       
 
 section .multiboot
+    ; db 0x0
     align 4
     dd MAGIC_NUMBER
     dd FLAGS

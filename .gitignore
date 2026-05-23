@@ -6,3 +6,6 @@
 
 # Ignore all the zip files
 *.zip
+
+#Ignore all the .elf files
+*.elf
