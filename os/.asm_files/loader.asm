@@ -34,7 +34,7 @@ loader:
     mov esp , kernel_stack + KERNEL_STACK_SIZE
     mov ebx , 0xCAFEBABE
     cmp esp , 0x00104000
-    jne stact_err_print
+    jne stack_err_print
     stack_init_print:
         push dword COM1
         push dword 0x0
@@ -50,7 +50,7 @@ loader:
         jmp .loop
 
 
-stact_err_print:    // cause if the stack is not set correcly then how you can even push var on it 
+stack_err_print:     ;cause if the stack is not set correcly then how you can even push var on it 
         .err_loop:
             hlt
             jmp .err_loop
