@@ -2,7 +2,7 @@
 
 A hobby operating system currently in progress built completely from scratch during summer vacation.
 
-> **Note:** Despite the name, this project is completely unrelated to Arch Linux—I just happen to like the name. Currently, the OS boots successfully from a custom bootloader, transitions into 32-bit Protected Mode, and hands execution over to a C kernel which prints a "Kernel loaded successfully" message.
+> **Note:** Despite the name, this project is completely unrelated to Arch Linux—I just happen to like the name. Currently, the OS boots successfully via grub and a custom loader script, transitions into 32-bit Protected Mode, and hands execution over to a C kernel which prints a "Welcome to Monarchy" message. 
 
 ---
 
@@ -22,7 +22,7 @@ Run these commands in your terminal to compile the 32-bit machine code, merge th
 
 ```bash
 # 1. Navigate to the kernel directory
-cd kernel
+cd os
 
 # 2. Run Make clean
 Make clean
