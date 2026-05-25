@@ -4,8 +4,8 @@
 #define LOWER_BYTE_SEND 15
 #define HIGHER_BYTE_SEND 14
 
-#include "io.h"
-#include "move_cursor.h"
+#include "../.h_files/io.h"
+
 
 void fb_move_cursor(unsigned short pos){
     outb(FB_COMMAND_PORT , LOWER_BYTE_SEND);
