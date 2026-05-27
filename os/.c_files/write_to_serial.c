@@ -1,4 +1,4 @@
-#include "../.h_files/serial_port_config.h"
+#include "../.h_files/serial_port.h"
 
 void write_to_serial(char* msg, unsigned short com){
     int i = 0;
@@ -19,4 +19,13 @@ void write_to_log(char* msg , int type , unsigned short com){
     write_data(com, '\r');
     write_data(com, '\n');
     
+}
+
+void log_error(char* msg, unsigned short com){
+    write_to_log(msg , 1 , com);
+}
+
+
+void log_info(char* msg, unsigned short com){
+    write_to_log(msg , 0 , com);
 }

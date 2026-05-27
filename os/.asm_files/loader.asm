@@ -1,7 +1,8 @@
 global loader
 extern main
-extern write_to_log
+extern log_info
 extern serial_port_check
+
 COM1 equ 0x3F8
 
 section .multiboot
@@ -35,12 +36,11 @@ loader:
     mov ebx , 0xCAFEBABE
     cmp esp , 0x00104000
     jne stack_err_print
-    stack_init_print:
+    stack_init_log:
         push dword COM1
-        push dword 0x0
         push dword stack_init
-        call write_to_log
-        add esp , 16
+        call log_info
+        add esp , 8
 
 
 

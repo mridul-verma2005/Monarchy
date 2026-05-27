@@ -1,4 +1,11 @@
 #include "../.h_files/io.h"
+#include "../.h_files/write_to_screen.h"
+#include "../.h_files/write_to_serial.h"
+
+
+#define DIVISOR 12
+#define COM1 0X3F8
+#define FREE_TO_SEND 0X20
 
 
 
@@ -51,4 +58,19 @@ int serial_port_config(unsigned short com , unsigned short divisor){
 void write_data(unsigned short com , char data){
     while(is_tramit_buffer_empty(com) == 0);
     outb(SERIAL_DATA_PORT(com),data);
+}
+
+
+int serial_port_check(){
+    if(serial_port_config(COM1,DIVISOR) == FREE_TO_SEND){
+        log_info("serial port 1 is ready to use",COM1);
+        return 0;
+
+    }
+    else{
+        write_to_screen("cant use serial port 1, printing to screen , aborting loading kernel");
+        return 1;
+        
+
+    }
 }

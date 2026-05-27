@@ -1,6 +1,8 @@
 global outb
 global inb
 
+
+section .text
 outb:
     mov al , [esp + 8]
     mov dx , [esp + 4]

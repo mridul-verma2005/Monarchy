@@ -8,5 +8,6 @@ void serial_modem_line_config(unsigned short com);
 void is_tramit_buffer_empty(unsigned short com);
 int serial_port_config(unsigned short com , unsigned short divisor);
 void write_data(unsigned short com , char data);
+int serial_port_check();
 
 #endif
