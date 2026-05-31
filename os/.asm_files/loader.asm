@@ -21,7 +21,7 @@ section .rodata
     stack_err db "Error in Stack initialization aborting loading kernel",0
 
 section .multiboot
-    ; db 0x0
+    db 0x0
     align 4
     dd MAGIC_NUMBER
     dd FLAGS

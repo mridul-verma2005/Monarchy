@@ -9,3 +9,6 @@
 
 #Ignore all the .elf files
 *.elf
+
+#Ignore all the .log files
+*.log

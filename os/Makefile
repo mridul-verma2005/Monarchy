@@ -4,7 +4,7 @@ GCCFLAGS += -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Wer
 LINKERFLAGS =  -T .ld_files/link.ld -m elf_i386
 RUNQEMU = qemu-system-i386
 FILES_KERNEL = loader.o io.o gdt_init.o gdt.o main.o move_cursor.o serial_port.o write_to_screen.o 
-FILES_KERNEL += write_to_serial.o 
+FILES_KERNEL += write_to_serial.o idt.o idt_isr.o pic.o
 FILES_ISO = kernel.elf .cfg_files/grub.cfg serial1.log
 FILES_EXE = Monarchy.iso kernel.elf serial1.log
 
@@ -30,6 +30,9 @@ loader.o : .asm_files/loader.asm
 io.o : .asm_files/io.asm 
 	nasm $(NAMSFLAGS) .asm_files/io.asm -o io.o
 
+idt_isr.o : .asm_files/idt_isr.asm 
+	nasm $(NAMSFLAGS) .asm_files/idt_isr.asm -o idt_isr.o
+
 gdt_init.o : .asm_files/gdt_init.asm 
 	nasm $(NAMSFLAGS) .asm_files/gdt_init.asm -o gdt_init.o
 
@@ -50,6 +53,12 @@ write_to_serial.o : .c_files/write_to_serial.c .h_files/serial_port.h
 
 gdt.o : .c_files/gdt.c .h_files/gdt.h .h_files/write_to_serial.h .h_files/gdt_init.h
 	gcc $(GCCFLAGS) .c_files/gdt.c -o gdt.o
+
+idt.o : .c_files/idt.c .h_files/idt.h
+	gcc $(GCCFLAGS) .c_files/idt.c -o idt.o
+
+pic.o : .c_files/pic.c .h_files/pic.h
+	gcc $(GCCFLAGS) .c_files/pic.c -o pic.o
 
 
 run : Monarchy.iso 
