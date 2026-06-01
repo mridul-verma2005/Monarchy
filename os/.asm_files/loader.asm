@@ -12,12 +12,11 @@ CHECKSUM equ -(MAGIC_NUMBER)
 KERNEL_STACK_SIZE equ 4096
 
 section .bss 
-    align 4
     kernel_stack:
         resb KERNEL_STACK_SIZE
 
 section .rodata
-    stack_init db "Stack initialized at 0x00104000",0  
+    stack_init db "Stack initialized at 0x00105000",0  
     stack_err db "Error in Stack initialization aborting loading kernel",0
 
 section .multiboot
@@ -33,9 +32,9 @@ loader:
     cmp eax , 0
     jne serial_port_error
     mov esp , kernel_stack + KERNEL_STACK_SIZE
-    mov ebx , 0xCAFEBABE
-    cmp esp , 0x00104000
+    cmp esp , 0x00105000
     jne stack_err_print
+   
     stack_init_log:
         push dword COM1
         push dword stack_init
@@ -45,6 +44,7 @@ loader:
 
 
     call main
+    mov ebx , 0xCAFEBABE
     .loop:
         hlt 
         jmp .loop

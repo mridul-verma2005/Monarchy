@@ -2,6 +2,8 @@
 #define PIC_H
 #include "types.h"
 #include "io.h"
+#include "write_to_screen.h"
+#include "write_to_serial.h"
 #define MASTER_PIC    0X20
 #define SLAVE_PIC     0XA0
 #define PIC_EOI       0X20
@@ -26,7 +28,7 @@
 #define PIC_READ_ISR                    0X0B
 
 
-void PIC_SEND_EOI(uint8_t irq);
+void PIC_SEND_EOI(uint8_t vector);
 void PIC_INIT(void);
 void DISABLE_PIC(void);
 void DISABLE_A_IRQ_LINE(uint8_t irq_line);

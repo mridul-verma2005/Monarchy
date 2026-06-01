@@ -4,14 +4,17 @@
 #include "../.h_files/write_to_serial.h"
 #include "../.h_files/gdt.h"
 #include "../.h_files/idt.h"
+#include "../.h_files/pic.h"
 
 
 
 int main(){
     gdt_start();
+    // PIC_INIT();  
     IDT_INIT();
     log_info("Kernel Loaded Sucessfully",COM1);
     write_to_screen("Welcome to Monarchy");
+    // int a = 2/0;
 
     return 0;
 }

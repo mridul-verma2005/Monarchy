@@ -1,22 +1,31 @@
 extern exception_handler
+extern interupt_handler
 global isr_stub_table
 
 %macro isr_err_stub 1
-    isr_stub_%+%1:
-    add esp , 4
+    isr_stub_%1:
+    push dword %1
     call exception_handler
-    
+    add esp , 8
     iret
 %endmacro
 
 
 %macro isr_no_err_stub 1
-    isr_stub_%+%1:
+    isr_stub_%1:
+    push dword %1
     call exception_handler
+    add esp , 4
     iret
 %endmacro
 
-
+%macro isr_hardware_stub 1
+    isr_stub_%1:
+    push dword %1
+    call interupt_handler
+    add esp , 4
+    iret
+%endmacro
 
 
 
@@ -54,9 +63,27 @@ isr_err_stub    30
 isr_no_err_stub 31
 
 
+isr_hardware_stub 32
+isr_hardware_stub 33
+isr_hardware_stub 34
+isr_hardware_stub 35
+isr_hardware_stub 36
+isr_hardware_stub 37
+isr_hardware_stub 38
+isr_hardware_stub 39
+isr_hardware_stub 40
+isr_hardware_stub 41
+isr_hardware_stub 42
+isr_hardware_stub 43
+isr_hardware_stub 44
+isr_hardware_stub 45
+isr_hardware_stub 46
+isr_hardware_stub 47
+
+
 isr_stub_table:
     %assign i 0
-    %rep 32
+    %rep 48
         dd isr_stub_%+%[i]
         %assign i i+1
     %endrep

@@ -1,6 +1,6 @@
 NAMSFLAGS = -f elf
 GCCFLAGS = -m32 -nostdlib -nostdinc -fno-builtin 
-GCCFLAGS += -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -I.h_files/
+GCCFLAGS += -fno-stack-protector -nostartfiles -nodefaultlibs  -c -I.h_files/
 LINKERFLAGS =  -T .ld_files/link.ld -m elf_i386
 RUNQEMU = qemu-system-i386
 FILES_KERNEL = loader.o io.o gdt_init.o gdt.o main.o move_cursor.o serial_port.o write_to_screen.o 

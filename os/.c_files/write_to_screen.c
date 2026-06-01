@@ -20,7 +20,7 @@ void write_to_screen(char* msg_pointer){
 }
 
 int strlen(char* msg){
-    int i = 1;
+    int i = 0;
     while(msg[i] != '\0'){
         i++;
     }
@@ -38,9 +38,8 @@ void clear_screen(){
     
 
 }
-void write_error_to_screen(char * err_msg){
-    clear_screen();
-    char* fb_start = (char*) (FRAMEBUFFER_START + (160 *12));  // ON THE 13TH LINE, THE MIDDLE ROW
+void write_error_to_screen(char * err_msg, int row){
+    char* fb_start = (char*) (FRAMEBUFFER_START + (160 *row));  // ON THE 13TH LINE, THE MIDDLE ROW
     int err_msg_len = strlen(err_msg);
     int space = 80 - err_msg_len;
     int side_gap = space/2;
@@ -57,6 +56,6 @@ void write_error_to_screen(char * err_msg){
         fb_start[2*(i+j) + 1] = ((RED_COL & 0xf) << 4) | (WHITE_COL & 0xf);
         j++;
     }
-    fb_move_cursor(MIDDLE_ROW_CURSOR_START + i + j);
+    fb_move_cursor((row *80 -1) + i + j);
 
 }

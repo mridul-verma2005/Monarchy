@@ -3,8 +3,8 @@
 
 
 
-void PIC_SEND_EOI(uint8_t irq){
-    if (irq >= 8){
+void PIC_SEND_EOI(uint8_t vector){
+    if (vector > 39){
         outb(SLAVE_PIC, PIC_EOI);
     }
     outb(MASTER_PIC,PIC_EOI);
@@ -25,12 +25,14 @@ void PIC_INIT(void){
 
     outb(MASTER_PIC_DATA_PORT,USE_ALL_IRQ_PINS);
     outb(SLAVE_PIC_DATA_PORT,USE_ALL_IRQ_PINS);
+    log_info("PIC is initialized",COM1);
 
 }
 
 void DISABLE_PIC(void){
     outb(MASTER_PIC_DATA_PORT,DISABLE_ALL_IRQ_PINS);
     outb(SLAVE_PIC_DATA_PORT,DISABLE_ALL_IRQ_PINS);
+    log_info("PIC is disabled",COM1);
 }
 
 void DISABLE_A_IRQ_LINE(uint8_t irq_line){
@@ -45,7 +47,7 @@ void DISABLE_A_IRQ_LINE(uint8_t irq_line){
         irq_line -= 8;
     }
     current_bitmap = inb(port);
-    new_bitmap = current_bitmap | (1>> irq_line);
+    new_bitmap = current_bitmap | (1<< irq_line);
     outb(port,new_bitmap);
 }
 
@@ -62,7 +64,7 @@ void ENABLE_A_IRQ_LINE(uint8_t irq_line){
         irq_line -= 8;
     }
     current_bitmap = inb(port);
-    new_bitmap = current_bitmap & ~(1>> irq_line);
+    new_bitmap = current_bitmap & ~(1<< irq_line);
     outb(port,new_bitmap);
 }
 

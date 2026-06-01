@@ -24,7 +24,7 @@
 
 
 void write_to_screen( char* msg_pointer);
-void write_error_to_screen(char * err_msg);
+void write_error_to_screen(char * err_msg, int row);
 void clear_screen(void);
 
 #endif
