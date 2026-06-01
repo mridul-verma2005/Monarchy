@@ -12,3 +12,9 @@
 
 #Ignore all the .log files
 *.log
+
+#Ignore all the .iso files
+*.iso
+
+#Ignore the iso folder
+iso/
