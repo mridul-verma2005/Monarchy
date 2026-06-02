@@ -1,11 +1,11 @@
 NAMSFLAGS = -f elf
 GCCFLAGS = -m32 -nostdlib -nostdinc -fno-builtin 
-GCCFLAGS += -fno-stack-protector -nostartfiles -nodefaultlibs  -c -I.h_files/
+GCCFLAGS += -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -I.h_files/
 LINKERFLAGS =  -T .ld_files/link.ld -m elf_i386
 RUNQEMU = qemu-system-i386
 FILES_KERNEL = loader.o io.o gdt_init.o gdt.o main.o move_cursor.o serial_port.o write_to_screen.o 
-FILES_KERNEL += write_to_serial.o idt.o idt_isr.o pic.o
-FILES_ISO = kernel.elf .cfg_files/grub.cfg serial1.log
+FILES_KERNEL += write_to_serial.o idt.o idt_isr.o pic.o helper_function.o
+FILES_ISO = kernel.elf .cfg_files/grub.cfg serial1.log 
 FILES_EXE = Monarchy.iso kernel.elf serial1.log
 
 Monarchy.iso : $(FILES_ISO)
@@ -59,6 +59,9 @@ idt.o : .c_files/idt.c .h_files/idt.h
 
 pic.o : .c_files/pic.c .h_files/pic.h
 	gcc $(GCCFLAGS) .c_files/pic.c -o pic.o
+
+helper_function.o : .c_files/helper_function.c 
+	gcc $(GCCFLAGS) .c_files/helper_function.c -o helper_function.o
 
 
 run : Monarchy.iso 

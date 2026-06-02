@@ -10,7 +10,9 @@
 
 int main(){
     gdt_start();
-    // PIC_INIT();  
+    PIC_INIT();
+    // DISABLE_A_IRQ_LINE(0);
+    // DISABLE_A_IRQ_LINE(12);  
     IDT_INIT();
     log_info("Kernel Loaded Sucessfully",COM1);
     write_to_screen("Welcome to Monarchy");

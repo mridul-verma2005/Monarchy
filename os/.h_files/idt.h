@@ -1,10 +1,11 @@
 #ifndef IDT_H
 #define IDT_H
 
-#include "../.h_files/types.h"
-#include "../.h_files/write_to_screen.h"
-#include "../.h_files/write_to_serial.h"
-#include "../.h_files/pic.h"
+#include "types.h"
+#include "write_to_screen.h"
+#include "write_to_serial.h"
+#include "pic.h"
+#include "helper_function.h"
 
 #define MAX_DESCRIPTOR          256
 #define TASK_FLAGS              0X8F

@@ -4,6 +4,7 @@
 #include "io.h"
 #include "write_to_screen.h"
 #include "write_to_serial.h"
+#include "helper_function.h"
 #define MASTER_PIC    0X20
 #define SLAVE_PIC     0XA0
 #define PIC_EOI       0X20

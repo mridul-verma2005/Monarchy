@@ -4,42 +4,32 @@ IDTR idtr;
 extern void* isr_stub_table[];
 
 
-char* int_to_string(int number){
-    int digit;
-    static char value[3] = " ";
-    value[2] = '\0';
-    if(number == 0){
-        value[0] = '0';
-        value[1] = '\0';
-        return value;
-    }
-        
-    else{
-        int i = 1;
-        while(number > 0 && i >= 0){
-            digit = number % 10;
-            value[i] = '0' + digit;
-            number /= 10;
-            i--;
-        }
-    }
-    if(value[0] == ' '){
-        value[0] = value[1];
-        value[1] = '\0';
-    }
-    
-    return value;
-}
 
 
 
 __attribute__ ((noreturn)) void exception_handler(int vector){
-    char* vector_string = int_to_string(vector);
     clear_screen();
-    write_error_to_screen("[ERROR]: Exception occurred, HALTING",12);
-    write_error_to_screen("ERROR VECTOR",14);
-    write_error_to_screen(vector_string,15);
-    log_error("Exception occurred, HALTING",COM1);
+
+    char* vector_string = int_to_string(vector);
+    int size_vector_string = strlen_d(vector_string);
+
+    char err_msg_screen[] =  "[ERROR]: Exception occurred halting , vector no :";
+    char err_msg_log[] = "Exception occurred halting , vector no :";
+
+    int size_err_msg_screen = strlen_d(err_msg_screen);
+    int size_err_msg_log = strlen_d(err_msg_log);
+    
+    int result_log_size = size_err_msg_log + size_vector_string + 2;
+    int result_screen_size = size_err_msg_screen + size_vector_string + 2;
+
+    char log_result[result_log_size];
+    char screen_result[result_screen_size];
+
+    concaternate(err_msg_screen, vector_string , screen_result);
+    concaternate(err_msg_log, vector_string, log_result);
+
+    write_error_to_screen(screen_result,13);
+    log_info(log_result , COM1);
     __asm__ volatile ("cli; hlt");
     while(1);
 }
@@ -47,10 +37,30 @@ __attribute__ ((noreturn)) void exception_handler(int vector){
 
 __attribute__ ((noreturn)) void interupt_handler(int vector){
     clear_screen();
-    write_error_to_screen("[ERROR]: Hardware Interrupt Occured", 12);
-    write_error_to_screen("ERROR VECTOR",13);
-    log_error("Hardware Interrupt Occured",COM1);
-    PIC_SEND_EOI(vector);
+
+    int irq = vector - 32;
+    char* irq_string = int_to_string(irq);
+    int size_irq_string = strlen_d(irq_string);
+   
+    char err_msg_screen[] =  "[ERROR]: Exception occurred halting , irq no :";
+    char err_msg_log[] = "Exception occurred halting , irq no :";
+
+    int size_err_msg_screen = strlen_d(err_msg_screen);
+    int size_err_msg_log = strlen_d(err_msg_log);
+    
+    int result_log_size = size_err_msg_log + size_irq_string + 2;
+    int result_screen_size = size_err_msg_screen + size_irq_string + 2;
+
+    char log_result[result_log_size];
+    char screen_result[result_screen_size];
+
+    concaternate(err_msg_screen, irq_string , screen_result);
+    concaternate(err_msg_log, irq_string, log_result);
+   
+    write_error_to_screen(screen_result,13);
+    log_info(log_result , COM1);
+    
+    PIC_SEND_EOI(irq);
     __asm__ volatile ("cli; hlt");
     while(1);
 }

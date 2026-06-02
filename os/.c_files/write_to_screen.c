@@ -19,13 +19,7 @@ void write_to_screen(char* msg_pointer){
     
 }
 
-int strlen(char* msg){
-    int i = 0;
-    while(msg[i] != '\0'){
-        i++;
-    }
-    return i;
-}
+
 
 void clear_screen(){
     char* fb_start = (char*) FRAMEBUFFER_START;
@@ -40,7 +34,7 @@ void clear_screen(){
 }
 void write_error_to_screen(char * err_msg, int row){
     char* fb_start = (char*) (FRAMEBUFFER_START + (160 *row));  // ON THE 13TH LINE, THE MIDDLE ROW
-    int err_msg_len = strlen(err_msg);
+    int err_msg_len = strlen_d(err_msg);
     int space = 80 - err_msg_len;
     int side_gap = space/2;
     int i = 0;
