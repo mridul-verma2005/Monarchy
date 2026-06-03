@@ -16,7 +16,7 @@ section .bss
         resb KERNEL_STACK_SIZE
 
 section .rodata
-    stack_init db "Stack initialized at 0x00105000",0  
+    stack_init db "Stack initialized",0  
     stack_err db "Error in Stack initialization aborting loading kernel",0
 
 section .multiboot
@@ -32,8 +32,6 @@ loader:
     cmp eax , 0
     jne serial_port_error
     mov esp , kernel_stack + KERNEL_STACK_SIZE
-    cmp esp , 0x00105000
-    jne stack_err_print
    
     stack_init_log:
         push dword COM1
@@ -49,11 +47,6 @@ loader:
         hlt 
         jmp .loop
 
-
-stack_err_print:     ;cause if the stack is not set correcly then how you can even push var on it 
-        .err_loop:
-            hlt
-            jmp .err_loop
 
 
 serial_port_error:
