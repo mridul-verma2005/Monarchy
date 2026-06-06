@@ -37,63 +37,65 @@ __attribute__ ((noreturn)) void exception_handler(int vector){
 
 
 
-
-__attribute__ ((noreturn)) void interupt_handler(int vector){
-    clear_screen();
-
+void interupt_handler(int vector){
     int irq = vector - 32;
-    char* irq_string = int_to_string(irq);
-    int size_irq_string = strlen_d(irq_string);
+    // if(irq == 1){
+    //     keyboard_handler();
+    // }
+    // else
+    {
+        char* irq_string = int_to_string(irq);
+        int size_irq_string = strlen_d(irq_string);
    
-    char err_msg_screen[] =  "[ERROR]: Exception occurred halting , irq no :";
-    char err_msg_log[] = "Exception occurred halting , irq no :";
+        char err_msg_screen[] =  "[ERROR]: Interrupt occurred halting , irq no :";
+        char err_msg_log[] = "Interrupt occurred halting , irq no :";
 
-    int size_err_msg_screen = strlen_d(err_msg_screen);
-    int size_err_msg_log = strlen_d(err_msg_log);
+        int size_err_msg_screen = strlen_d(err_msg_screen);
+        int size_err_msg_log = strlen_d(err_msg_log);
     
-    int result_log_size = size_err_msg_log + size_irq_string + 2;
-    int result_screen_size = size_err_msg_screen + size_irq_string + 2;
+        int result_log_size = size_err_msg_log + size_irq_string + 2;
+        int result_screen_size = size_err_msg_screen + size_irq_string + 2;
 
-    char log_result[result_log_size];
-    char screen_result[result_screen_size];
+        char log_result[result_log_size];
+        char screen_result[result_screen_size];
 
-    concaternate(err_msg_screen, irq_string , screen_result);
-    concaternate(err_msg_log, irq_string, log_result);
+        concaternate(err_msg_screen, irq_string , screen_result);
+        concaternate(err_msg_log, irq_string, log_result);
    
-    write_error_to_screen(screen_result,13);
-    log_info(log_result , COM1);
+        write_error_to_screen(screen_result,13);
+        log_info(log_result , COM1);
     
-    PIC_SEND_EOI(irq);
-    __asm__ volatile ("cli; hlt");
-    while(1);
+        PIC_SEND_EOI(irq);
+    }
+    
 }
 
 
-void keyboard_handler(int vector){
-    int irq = vector - 32;
-    char* irq_string = int_to_string(irq);
-    int size_irq_string = strlen_d(irq_string);
+// void keyboard_handler(int vector){
+//     int irq = vector - 32;
+//     char* irq_string = int_to_string(irq);
+//     int size_irq_string = strlen_d(irq_string);
    
-    char err_msg_screen[] =  "[ERROR]: Exception occurred halting , irq no :";
-    char err_msg_log[] = "Exception occurred halting , irq no :";
+//     char err_msg_screen[] =  "[ERROR]: Interrupt occurred halting , irq no :";
+//     char err_msg_log[] = "Interrupt occurred halting , irq no :";
 
-    int size_err_msg_screen = strlen_d(err_msg_screen);
-    int size_err_msg_log = strlen_d(err_msg_log);
+//     int size_err_msg_screen = strlen_d(err_msg_screen);
+//     int size_err_msg_log = strlen_d(err_msg_log);
     
-    int result_log_size = size_err_msg_log + size_irq_string + 2;
-    int result_screen_size = size_err_msg_screen + size_irq_string + 2;
+//     int result_log_size = size_err_msg_log + size_irq_string + 2;
+//     int result_screen_size = size_err_msg_screen + size_irq_string + 2;
 
-    char log_result[result_log_size];
-    char screen_result[result_screen_size];
+//     char log_result[result_log_size];
+//     char screen_result[result_screen_size];
 
-    concaternate(err_msg_screen, irq_string , screen_result);
-    concaternate(err_msg_log, irq_string, log_result);
+//     concaternate(err_msg_screen, irq_string , screen_result);
+//     concaternate(err_msg_log, irq_string, log_result);
    
-    write_error_to_screen(screen_result,13);
-    log_info(log_result , COM1);
+//     write_error_to_screen(screen_result,13);
+//     log_info(log_result , COM1);
     
-    PIC_SEND_EOI(irq);
-}
+//     PIC_SEND_EOI(irq);
+// }
 
 
 void IDT_SET_DESCRIPTOR(uint8_t vector , void* isr_address  , uint8_t flags){

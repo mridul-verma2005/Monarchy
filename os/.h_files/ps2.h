@@ -44,4 +44,12 @@
 
 
 void PS2_INIT(void);
+void READ_FROM_PS2_BUFFER(void);
+int READ_FROM_PS2_BUFFER_TIMER(uint16_t port);
+void WRITE_TO_PS2_BUFFER(void);
+void ENABLE_PS2_PORT1_INTERRUPT(void);
+
+
+
+
 #endif

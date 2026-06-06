@@ -23,11 +23,16 @@
 
 
 #include "helper_function.h"
+#include "types.h"
+#include "move_cursor.h"
 
 
 void write_to_screen( char* msg_pointer);
 void write_error_to_screen(char * err_msg, int row);
 int strlen_d(char* msg);
 void clear_screen(void);
+void write_char(char ascii_code, uint8_t fg , uint8_t bg);
+void next_line(void);
+void back_space(void);
 
 #endif

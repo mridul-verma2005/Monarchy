@@ -1,7 +1,8 @@
 global loader
-extern main
+extern kernel_main
 extern log_info
 extern serial_port_check
+extern bss_cleaning
 
 COM1 equ 0x3F8
 
@@ -41,7 +42,8 @@ loader:
 
 
 
-    call main
+    call bss_cleaning
+    call kernel_main
     mov ebx , 0xCAFEBABE
     .loop:
         hlt 

@@ -3,8 +3,8 @@ GCCFLAGS = -m32 -nostdlib -nostdinc -fno-builtin
 GCCFLAGS += -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -I.h_files/
 LINKERFLAGS =  -T .ld_files/link.ld -m elf_i386
 RUNQEMU = qemu-system-i386
-FILES_KERNEL = loader.o io.o gdt_init.o gdt.o main.o move_cursor.o serial_port.o write_to_screen.o 
-FILES_KERNEL += write_to_serial.o idt.o idt_isr.o pic.o helper_function.o ps2.o
+FILES_KERNEL = loader.o io.o gdt_init.o gdt.o kernel_main.o move_cursor.o serial_port.o write_to_screen.o 
+FILES_KERNEL += write_to_serial.o idt.o idt_isr.o pic.o helper_function.o ps2.o keyboard.o bss_cleaning.o 
 FILES_ISO = kernel.elf .cfg_files/grub.cfg serial1.log 
 FILES_EXE = Monarchy.iso kernel.elf serial1.log
 
@@ -39,8 +39,8 @@ gdt_init.o : .asm_files/gdt_init.asm
 move_cursor.o : .c_files/move_cursor.c .h_files/io.h .h_files/move_cursor.h
 	gcc $(GCCFLAGS) .c_files/move_cursor.c -o move_cursor.o
 
-main.o : .c_files/main.c .h_files/move_cursor.h .h_files/write_to_screen.h .h_files/write_to_serial.h
-	gcc $(GCCFLAGS) .c_files/main.c -o main.o
+kernel_main.o : .c_files/kernel_main.c .h_files/move_cursor.h .h_files/write_to_screen.h .h_files/write_to_serial.h
+	gcc $(GCCFLAGS) .c_files/kernel_main.c -o kernel_main.o
 
 serial_port.o : .c_files/serial_port.c .h_files/write_to_screen.h  .h_files/write_to_serial.h  .h_files/io.h
 	gcc $(GCCFLAGS) .c_files/serial_port.c -o serial_port.o
@@ -65,6 +65,13 @@ ps2.o : .c_files/ps2.c .h_files/ps2.h
 
 helper_function.o : .c_files/helper_function.c 
 	gcc $(GCCFLAGS) .c_files/helper_function.c -o helper_function.o
+
+keyboard.o : .c_files/keyboard.c .h_files/keyboard.h
+	gcc $(GCCFLAGS) .c_files/keyboard.c -o keyboard.o
+
+bss_cleaning.o : .c_files/bss_cleaning.c 
+	gcc $(GCCFLAGS) .c_files/bss_cleaning.c -o bss_cleaning.o
+
 
 
 run : Monarchy.iso 

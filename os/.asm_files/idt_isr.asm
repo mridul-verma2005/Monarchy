@@ -1,6 +1,5 @@
 extern exception_handler
 extern interupt_handler
-extern keyboard_handler
 global isr_stub_table
 
 %macro isr_err_stub 1
@@ -20,13 +19,13 @@ global isr_stub_table
     iret
 %endmacro
 
-%macro isr_keyboard_hardware_stub 1
-    isr_stub_%1:
-    push dword %1
-    call keyboard_handler
-    add esp , 4
-    iret
-%endmacro
+; %macro isr_keyboard_hardware_stub 1
+;     isr_stub_%1:
+;     push dword %1
+;     call keyboard_handler
+;     add esp , 4
+;     iret
+; %endmacro
 
 %macro isr_hardware_stub 1
     isr_stub_%1:
@@ -71,7 +70,7 @@ isr_no_err_stub 31
 
 
 isr_hardware_stub 32
-isr_keyboard_hardware_stub 33
+isr_hardware_stub 33
 isr_hardware_stub 34
 isr_hardware_stub 35
 isr_hardware_stub 36

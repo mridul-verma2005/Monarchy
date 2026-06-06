@@ -52,12 +52,12 @@ int PS2_CONTROLLER_TEST(void){
     outb(PS_COMMAND_PORT,TEST_PS2_CONTROLLER);
     READ_FROM_PS2_BUFFER();
     if(inb(PS_DATA_PORT) == 0x55){
-        log_info("ps2 controller self test passed", COM1);
+        // log_info("ps2 controller self test passed", COM1);
         SET_CONFIG_BYTES(DISABLE_BOTH_PORT_CLOCK_AND_INTERRUPT);;
         return 0;
     }
     else{
-        log_error("ps2 controller self test failed",COM1);
+        // log_error("ps2 controller self test failed",COM1);
         SET_CONFIG_BYTES(DISABLE_BOTH_PORT_CLOCK_AND_INTERRUPT);
         return 1;
     }
@@ -71,7 +71,7 @@ void DETERMINING_NO_OF_PS2_PORTS(void){
     outb(PS_COMMAND_PORT,READ_CONFIG_COMMAND);
     READ_FROM_PS2_BUFFER();
     if((inb(PS_DATA_PORT) & 0X20)  == 0){
-        log_info("second ps2 port detected",COM1);
+        // log_info("second ps2 port detected",COM1);
     }
     else{
         log_info("there is not second ps2 port",COM1);
@@ -84,7 +84,7 @@ void PS2_PORT_TEST(void){
     outb(PS_COMMAND_PORT,TEST_FIRST_PS2_PORT);
     READ_FROM_PS2_BUFFER();
     if(inb(PS_DATA_PORT) == 0){
-        log_info("first ps2 port self test passed",COM1);
+        // log_info("first ps2 port self test passed",COM1);
     }
     else{
         log_info("first ps2 port self test failed",COM1);
@@ -94,7 +94,7 @@ void PS2_PORT_TEST(void){
     outb(PS_COMMAND_PORT,TEST_SECOND_PS2_PORT);
     READ_FROM_PS2_BUFFER();
     if(inb(PS_DATA_PORT) == 0){
-        log_info("second ps2 port self test passed",COM1);
+        // log_info("second ps2 port self test passed",COM1);
     }
     else{
         log_info("second ps2 port self test failed",COM1);
@@ -103,25 +103,24 @@ void PS2_PORT_TEST(void){
 
 void ENABLE_PS2_PORTS(void){
     SET_CONFIG_BYTES(DISABLE_PORT_1_INTERRUPT_AND_PORT_2_BOTH);           // port 2 is disabled and port 1 clock is only active not the interrupt
-    log_info("keyboard clock is enabled but the interupts is disalbed in the config byte",COM1);
     WRITE_TO_PS2_BUFFER();
     outb(PS_COMMAND_PORT,ENABLE_FIRST_PS2_PORT);
-    log_info("first port is enabled",COM1);
+    log_info("port 1 clock is enabled but the interupts is disalbed in the config byte",COM1);
     // WRITE_TO_PS2_BUFFER();
     // outb(PS_COMMAND_PORT,ENABLE_SECOND_PS2_PORT);
 }
 
 void RESET_PS2_DEVICES(void){
-    log_info("before the keyboard is reset",COM1);
+    // log_info("before the keyboard is reset",COM1);
     WRITE_TO_PS2_BUFFER();
     outb(PS_DATA_PORT,RESET_COMMAND);
-    log_info("after the keyboard is reset",COM1);
+    // log_info("after the keyboard is reset",COM1);
     READ_FROM_PS2_BUFFER();
     if((inb(PS_DATA_PORT) == 0xFA)){
-        log_info("device at port 1 has acknowledged the self test command",COM1);    
+        // log_info("device at port 1 has acknowledged the self test command",COM1);    
         READ_FROM_PS2_BUFFER();
         if(inb(PS_DATA_PORT) == 0xAA){
-            log_info("device at port 1 has passed the self test",COM1);
+            // log_info("device at port 1 has passed the self test",COM1);
         }
         
     }
@@ -138,12 +137,12 @@ void DETECTING_PS2_DEVICES(void){
     outb(PS_DATA_PORT,DISABLE_SCANNING_COMMAND);
     READ_FROM_PS2_BUFFER();
     if((inb(PS_DATA_PORT) == 0xFA)){
-        log_info("device at port 1 has acknowledged the disable scanning command",COM1);
+        // log_info("device at port 1 has acknowledged the disable scanning command",COM1);
         WRITE_TO_PS2_BUFFER();
         outb(PS_DATA_PORT,IDENTIFY_COMMAND);
         READ_FROM_PS2_BUFFER();
         if(inb(PS_DATA_PORT) == 0xFA){
-            log_info("device at port 1 has acknowledged the identify command",COM1);
+            // log_info("device at port 1 has acknowledged the identify command",COM1);
             READ_FROM_PS2_BUFFER();
             uint8_t fisrt_byte = inb(PS_DATA_PORT);
             uint16_t second_byte = 0x00;
@@ -158,11 +157,9 @@ void DETECTING_PS2_DEVICES(void){
             outb(PS_DATA_PORT,ENALBE_SCANNING_COMMAND);
             READ_FROM_PS2_BUFFER();
             if(inb(PS_DATA_PORT) == 0xFA){
-                log_info("device at port 1 has acknowledged the enable scanning command",COM1);
+                // log_info("device at port 1 has acknowledged the enable scanning command",COM1);
                 log_info("ps2 controller and devices intialization is complete , only port 1 is enabled (keyboard)",COM1);
-                SET_CONFIG_BYTES(ENABLE_PORT_1_AND_PORT_2_DISABLED);
-
-                log_info("port 2 interrupt are now active",COM1);
+                
             }
 
         }
@@ -175,6 +172,12 @@ void DETECTING_PS2_DEVICES(void){
 
     }
 
+
+}
+
+void ENABLE_PS2_PORT1_INTERRUPT(void){
+    SET_CONFIG_BYTES(ENABLE_PORT_1_AND_PORT_2_DISABLED);
+    log_info("port 1 interrupt are now active",COM1);
 
 }
 
