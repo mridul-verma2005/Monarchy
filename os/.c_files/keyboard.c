@@ -4,6 +4,7 @@ static bool extended_flag = false;
 // static bool ctrl_flag = false;
 static bool shift_flag = false;
 static bool caps_flag = false;
+static bool release_flag = false;
 
 
 
@@ -17,7 +18,7 @@ const char sc2_to_ascii[256] = {
 
 
     [0X45] = '0',[0X16] = '1',[0X1E] = '2',[0X26] = '3',[0X25] = '4',
-    [0X2E] = '5',[0X36] = '6',[0X30] = '7',[0X3E] = '8',[0X46] = '9',
+    [0X2E] = '5',[0X36] = '6',[0X3D] = '7',[0X3E] = '8',[0X46] = '9',
 
    
 };
@@ -33,7 +34,7 @@ const char sc2_to_shift_caps_ascii[256] = {
     
     
     [0X45] = ')',[0X16] = '!',[0X1E] = '@',[0X26] = '#',[0X25] = '$',
-    [0X2E] = '%',[0X36] = '^',[0X30] = '&',[0X3E] = '*',[0X46] = '(',
+    [0X2E] = '%',[0X36] = '^',[0X3D] = '&',[0X3E] = '*',[0X46] = '(',
 
 };
 
@@ -89,6 +90,8 @@ void set_repeat_rate_and_delay(void){
     if(reply == 0XFA){
         WRITE_TO_PS2_BUFFER();
         outb(PS_DATA_PORT,CURRENT_TYPEMATIC_RATE_AND_DELAY);
+        READ_FROM_PS2_BUFFER();
+        inb(PS_DATA_PORT);
         log_info("typematic and repeat rate is set",COM1);
     }
     else if(reply == 0XFE){
@@ -98,53 +101,72 @@ void set_repeat_rate_and_delay(void){
 
 
 void keyboard_handler(void){
-    log_info("keyboard interupt",COM1);
     uint8_t scancode = inb(PS_DATA_PORT);
-
-    if(scancode == RELEASE_SCANCODE_2){
+    if(release_flag == true){
+        if(scancode == L_SHIFT || scancode == R_SHIFT){
+            shift_flag = false;
+        }
+        if(scancode == CAPS){
+            caps_flag = false;
+        }
+        release_flag = false;
         return;
     }
+
+    if(scancode == RELEASE_SCANCODE_2){
+        release_flag = true;
+        return;
+       
+    }
     else if(scancode == EXTENDED_SCANCODE_2){
-        extended_flag = 1;
+        extended_flag = true;
         return;
     }
     else if(scancode == L_SHIFT || scancode == R_SHIFT){
-        shift_flag = 1;
+        shift_flag = true;
+        return;
     }
+
     else if(scancode == CAPS){
-        if(caps_flag == 1) caps_flag = 0;
-        else if(caps_flag == 0) caps_flag = 1;
+        caps_flag = true;
+        return;
     }
+
     else if(scancode == ENTER){
         next_line();
+        return;
     }
     else if(scancode == L_CTRL || scancode == R_CTRL){
         return;
     }
     else if(scancode == BACKSPACE){
         back_space();
+        return;
     }
 
     else{
         char ascii;
-        if(shift_flag == 1){
+        if(shift_flag == true){
             ascii = sc2_to_shift_caps_ascii[scancode];
             write_char(ascii,WHITE_COL,BLACK_COL);
-            shift_flag = 0;
         }
-        else if(caps_flag == 1){
+        else if(caps_flag == true){
+            log_info("caps log is on",COM1);
             ascii = sc2_to_ascii[scancode];
-            if((ascii  <= 57) ||(ascii >= 48)){
+            if((ascii  <= 57) && (ascii >= 48)){
                 write_char(ascii,WHITE_COL,BLACK_COL);
             }
             else{
                 ascii = sc2_to_shift_caps_ascii[scancode];
                 write_char(ascii,WHITE_COL,BLACK_COL);
+                
             }
         }
+        else{
+            ascii = sc2_to_ascii[scancode];
+            write_char(ascii,WHITE_COL,BLACK_COL);
+        }
     }
-
-
 }
 
 

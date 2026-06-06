@@ -3,7 +3,7 @@
 
 static int row = -1;
 static int position = 0;
-static int char_row = 0;
+// static int char_row = 0;
 
 
 void write_to_screen(char* msg_pointer){
@@ -22,20 +22,27 @@ void write_to_screen(char* msg_pointer){
 
 void write_char(char ascii_code, uint8_t fg , uint8_t bg){
     char* fb_start;
-    fb_start = (char*) (FRAMEBUFFER_START + (position * 2) + (char_row * 160));
+    fb_start = (char*) (FRAMEBUFFER_START + (position * 2));
     fb_start[0] = ascii_code;
     fb_start[1] = (((bg & 0xf) << 4) | (fg & 0xf));
     position++;
-    char_row = (position/80) + 1;
+    fb_move_cursor(position);
 }
 
 void next_line(void){
-    char_row++;
+    int used_up = position % 80;
+    int remaining = 80 -used_up;
+    position += remaining;
+    fb_move_cursor(position);
 }
 
 void back_space(void){
     position--;
-    write_char(' ',BLACK_COL,BLACK_COL);
+    char* fb_start;
+    fb_start = (char*) (FRAMEBUFFER_START + (position * 2));
+    fb_start[0] = ' ';
+    fb_start[1] = (((BLACK_COL & 0xf) << 4) | (WHITE_COL & 0xf));
+    fb_move_cursor(position);
 }
 
 

@@ -39,10 +39,10 @@ __attribute__ ((noreturn)) void exception_handler(int vector){
 
 void interupt_handler(int vector){
     int irq = vector - 32;
-    // if(irq == 1){
-    //     keyboard_handler();
-    // }
-    // else
+    if(irq == 1){
+        keyboard_handler();
+    }
+    else
     {
         char* irq_string = int_to_string(irq);
         int size_irq_string = strlen_d(irq_string);
@@ -65,8 +65,8 @@ void interupt_handler(int vector){
         write_error_to_screen(screen_result,13);
         log_info(log_result , COM1);
     
-        PIC_SEND_EOI(irq);
     }
+    PIC_SEND_EOI(irq);
     
 }
 
