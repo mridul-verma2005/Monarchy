@@ -2,7 +2,7 @@
 
 A hobby operating system currently in progress built completely from scratch during summer vacation.
 
-> **Note:** Despite the name, this project is completely unrelated to Arch Linux—I just happen to like the name. Currently, the OS boots successfully via grub and a custom loader script, transitions into 32-bit Protected Mode, and hands execution over to a C kernel which prints a "Welcome to Monarchy" message. 
+> **Note:** Despite the name, this project is completely unrelated to Arch Linux—I just happen to like the name. Currently, the OS boots successfully via grub and a custom loader script, transitions into 32-bit Protected Mode, and hands execution over to a C kernel which start a custom Monarchy shell , the shell currenly does not have any shell command but basic working is perfect.
 
 ---
 
