@@ -7,6 +7,7 @@
 #include "../.h_files/pic.h"
 #include "../.h_files/ps2.h"
 #include "../.h_files/keyboard.h"
+#include "../.h_files/shell.h"
 
 
 
@@ -18,7 +19,9 @@ int kernel_main(){
     PS2_INIT();
     KEYBOARD_INIT();
     ENABLE_PS2_PORT1_INTERRUPT();
+    SCREEN_INIT();
     log_info("Kernel Loaded Sucessfully",COM1);
+    SHELL_INIT();
 
     return 0;
 }

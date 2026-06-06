@@ -34,5 +34,6 @@ void clear_screen(void);
 void write_char(char ascii_code, uint8_t fg , uint8_t bg);
 void next_line(void);
 void back_space(void);
+void SCREEN_INIT(void);
 
 #endif
