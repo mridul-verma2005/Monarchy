@@ -102,12 +102,10 @@ void set_repeat_rate_and_delay(void){
 
 void keyboard_handler(void){
     uint8_t scancode = inb(PS_DATA_PORT);
+    log_info("keybboard",COM1);
     if(release_flag == true){
         if(scancode == L_SHIFT || scancode == R_SHIFT){
             shift_flag = false;
-        }
-        if(scancode == CAPS){
-            caps_flag = false;
         }
         release_flag = false;
         return;
@@ -128,7 +126,12 @@ void keyboard_handler(void){
     }
 
     else if(scancode == CAPS){
-        caps_flag = true;
+        if(caps_flag == 0){
+            caps_flag = 1;
+        }
+        else if(caps_flag == 1){
+            caps_flag = 0;
+        }
         return;
     }
 
@@ -151,7 +154,7 @@ void keyboard_handler(void){
             write_char(ascii,WHITE_COL,BLACK_COL);
         }
         else if(caps_flag == true){
-            log_info("caps log is on",COM1);
+            
             ascii = sc2_to_ascii[scancode];
             if((ascii  <= 57) && (ascii >= 48)){
                 write_char(ascii,WHITE_COL,BLACK_COL);
