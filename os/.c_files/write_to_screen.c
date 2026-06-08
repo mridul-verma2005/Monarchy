@@ -12,16 +12,18 @@ static char* OS_TERMINAL_NAME = "Monarchy Terminal v.0.0.1";
 // static char* TEXT_EDITOR = "Text Editor v.0.0.1";
 
 
-void clear_screen(uint8_t bg){
+void clear_screen(uint8_t bg ,uint8_t fg){
 
     char* fb_start = (char*) FRAMEBUFFER_START;
     int i = 0;
 
     while(i < 2000){
         fb_start[2*i] = ' ';
-        fb_start[2*i + 1] = ((bg & 0xf) << 4) | (bg & 0xf);
+        fb_start[2*i + 1] = ((bg & 0xf) << 4) | (fg & 0xf);
         i++;
     }
+    position = FIRST_FRAMBUFFER_ROW_START;
+    SCREEN_INIT();
     
 }
 

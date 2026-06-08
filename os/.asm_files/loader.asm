@@ -10,7 +10,7 @@ section .multiboot
 MAGIC_NUMBER equ 0x1BADB002
 FLAGS equ 0x0
 CHECKSUM equ -(MAGIC_NUMBER)
-KERNEL_STACK_SIZE equ 4096
+KERNEL_STACK_SIZE equ 8192
 
 section .bss 
     kernel_stack:

@@ -5,7 +5,7 @@ static bool extended_flag = false;
 static bool shift_flag = false;
 static bool caps_flag = false;
 static bool release_flag = false;
-static bool enter_command_flag = false;
+
 
 
 
@@ -141,6 +141,9 @@ void keyboard_handler(void){
 
     else if(scancode == ENTER){
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
+        log_info("before the shell",COM1);
+        command_retrival();
+        log_info("after the shell",COM1);
         return;
     }
     else if(scancode == L_CTRL || scancode == R_CTRL){
@@ -164,22 +167,26 @@ void keyboard_handler(void){
         else if(shift_flag == true){
             ascii = sc2_to_shift_caps_ascii[scancode];
             write_char(ascii,BLACK_COL,WHITE_COL);
+            command_buffer_stack_push(ascii);
         }
         else if(caps_flag == true){
             
             ascii = sc2_to_ascii[scancode];
             if((ascii  <= 57) && (ascii >= 48)){
                 write_char(ascii,BLACK_COL,WHITE_COL);
+                 command_buffer_stack_push(ascii);
             }
             else{
                 ascii = sc2_to_shift_caps_ascii[scancode];
                 write_char(ascii,BLACK_COL,WHITE_COL);
+                 command_buffer_stack_push(ascii);
                 
             }
         }
         else{
             ascii = sc2_to_ascii[scancode];
             write_char(ascii,BLACK_COL,WHITE_COL);
+            command_buffer_stack_push(ascii);
         }
     }
 }

@@ -1,3 +1,7 @@
+#include "../.h_files/helper_function.h"
+
+
+
 char* int_to_string(int number){
     int digit;
     static char value[3];
@@ -54,6 +58,27 @@ void concaternate(char* string_1 , char* string_2 ,char * result){
     result[size_1 + size_2 + 1] = '\0';
 
 }
+
+bool strcmp_d(char* str1 , char* str2){
+    bool is_same = true;
+    int i = 0;
+    while((str1[i] != '\0') && (str2[i] != '\0')){
+        if(str1[i] != str2[i]){
+            is_same = false;
+            return is_same;
+        }
+        else{
+            i++;
+        }
+    }
+    if(str1[i] != str2[i]){
+        is_same = false;
+    }
+    return is_same;
+}
+
+
+
 
 
 
