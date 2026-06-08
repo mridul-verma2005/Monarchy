@@ -1,58 +1,113 @@
 #include "../.h_files/write_to_screen.h"
 #define FRAMEBUFFER_START 0X000B8000
+#define FIRST_FRAMBUFFER_ROW_START 80
 #define MAX_ROW_COUNT     24
 
-static int row = 0;
-static int position = 0;
-// static int char_row = 0;
- char* OS_NAME = "Monarchy@> ";
+// static int row = 1;
+static int position = FIRST_FRAMBUFFER_ROW_START;    
+static char* OS_NAME = "Monarchy";
+static char* seperator = "$: ";
+static char* OS_TERMINAL_NAME = "Monarchy Terminal v.0.0.1";
 
-void set_position_initial(){
-    int os_name_size = strlen_d(OS_NAME);
-    position += os_name_size;
-}
+// static char* TEXT_EDITOR = "Text Editor v.0.0.1";
 
-void clear_screen(){
+
+void clear_screen(uint8_t bg){
+
     char* fb_start = (char*) FRAMEBUFFER_START;
     int i = 0;
+
     while(i < 2000){
         fb_start[2*i] = ' ';
-        fb_start[2*i + 1] = ((BLACK_COL & 0xf) << 4) | (BLACK_COL & 0xf);
+        fb_start[2*i + 1] = ((bg & 0xf) << 4) | (bg & 0xf);
         i++;
     }
     
-
 }
 
-void clear_line(int row){
+void clear_line(int row , uint8_t bg){
+
     char* fb_start = (char*) FRAMEBUFFER_START;
     int row_start = row * 160;
     int i = 0;
+
     while(i < 80){
         fb_start[2*i + row_start] = ' ';
-        fb_start[2*i + 1 + row_start] = ((BLACK_COL & 0xf) << 4) | (BLACK_COL & 0xf);
+        fb_start[2*i + 1 + row_start] = ((bg & 0xf) << 4) | (bg & 0xf);
         i++;
     }
+
 }
 
-void write_to_screen(char* msg_pointer){
-    char* fb_start;
-    fb_start = (char*) (FRAMEBUFFER_START + ((row)*160));
-    row++;
-    if(row > 24){
-        row--;
+
+void scroll_from_top(int start_row){
+
+    int row_count_start = start_row;
+    char* fb_start = (char*)FRAMEBUFFER_START;
+
+    while(row_count_start < MAX_ROW_COUNT){
+        int i = ((row_count_start + 1) * 80) ;
+
+        while(i <= ((row_count_start +2)* 80 - 1)){
+            fb_start[2*i - 160] = fb_start[2*i];
+            fb_start[2*i - 160 + 1] = fb_start[2*i + 1];
+            i++;
+
+        }
+
+        row_count_start++;
     }
-    int i = 0;
-    while(msg_pointer[i]!= '\0'){
-        fb_start[2*i] = msg_pointer[i];
-        fb_start[2*i + 1] = ((BLACK_COL & 0xf) << 4) | (WHITE_COL & 0xf);  // BG AND THEN FG
-        i++;
-    }
-    fb_move_cursor(i + 80*(row -1));
+    position -= 80;
     
 }
 
-void write_char(char ascii_code, uint8_t fg , uint8_t bg){
+
+void terminal_name_set(uint8_t osname_bg , uint8_t osname_fg){
+    char* fb_start = (char*) (FRAMEBUFFER_START); 
+    int terminal_name_len = strlen_d(OS_TERMINAL_NAME);
+    int space = 80 - terminal_name_len;
+    int right_gap = space/2;
+    int right_gap_len = 0;
+    int os_name_len = 0;
+
+
+    while(right_gap_len < right_gap){
+        fb_start[2*right_gap_len] = ' ';
+        fb_start[2*right_gap_len + 1] = ((osname_bg & 0xf) << 4) | (osname_fg & 0xf);
+        right_gap_len++;
+    }
+
+    right_gap_len--;
+    while(OS_TERMINAL_NAME[os_name_len] != '\0'){
+        fb_start[2*(right_gap_len+os_name_len)] = OS_TERMINAL_NAME[os_name_len];
+        fb_start[2*(right_gap_len+os_name_len) + 1] = ((osname_bg & 0xf) << 4) | (osname_fg & 0xf);
+        os_name_len++;
+    }
+
+    int left_gap = right_gap_len + os_name_len;
+     while(left_gap < 80){
+        fb_start[2*left_gap] = ' ';
+        fb_start[2*left_gap + 1] = ((osname_bg & 0xf) << 4) | (osname_fg & 0xf);
+        left_gap++;
+    }
+
+}
+
+void write_to_screen(char* msg_pointer, uint8_t bg , uint8_t fg){
+
+    int msg_len = strlen_d(msg_pointer);
+
+    for(int i = 0 ; i < msg_len ; i++){
+        write_char(msg_pointer[i],bg,fg);
+    }
+    
+}
+
+void write_char(char ascii_code, uint8_t bg , uint8_t fg){
+    if(position >= 2000){
+        scroll_from_top(1);
+        clear_line(MAX_ROW_COUNT,bg);
+    }
     char* fb_start;
     fb_start = (char*) (FRAMEBUFFER_START + (position * 2));
     fb_start[0] = ascii_code;
@@ -61,42 +116,36 @@ void write_char(char ascii_code, uint8_t fg , uint8_t bg){
     fb_move_cursor(position);
 }
 
-void clear_from_top(){
-    int row_count_start = 0;
-    char* fb_start = (char*)FRAMEBUFFER_START;
-    while(row_count_start < MAX_ROW_COUNT){
-        clear_line(row_count_start);
-        int i = ((row_count_start + 2) * 160) - 1;
-        while(i >= ((row_count_start +1)* 160)){
-            fb_start[i - 160] = fb_start[i];
-            fb_start[i - 160 - 1] = fb_start[i - 1];
-            i--;
-        }
-        row_count_start++;
-    }
-    clear_line(row_count_start);
-    position -=80;
-    
-}
 
-void next_line(void){
+
+
+void next_line(uint8_t osname_bg , uint8_t osname_fg, uint8_t seperator_bg , uint8_t seperator_fg , int start_row){
     int used_up = position % 80;
     int remaining = 80 -used_up;
     position += remaining;
     if(position >= 2000){
-        clear_from_top();
+        scroll_from_top(start_row);
+        clear_line(MAX_ROW_COUNT,osname_bg);
     }
-    write_to_screen(OS_NAME);
-    set_position_initial();
-    fb_move_cursor(position);
+    // else{
+         write_to_screen(OS_NAME,osname_bg,osname_fg);
+        write_to_screen(seperator,seperator_bg,seperator_fg);
+        fb_move_cursor(position);
+    
+   
 }
 
-void back_space(void){
+void back_space(uint8_t bg , uint8_t fg){
+    int current_position_on_the_line = (position%80) + 1;
+    int total_label_size = strlen_d(OS_NAME) + strlen_d(seperator);
+    if((current_position_on_the_line - total_label_size) <= 1){
+        return;
+    }
     position--;
     char* fb_start;
     fb_start = (char*) (FRAMEBUFFER_START + (position * 2));
     fb_start[0] = ' ';
-    fb_start[1] = (((BLACK_COL & 0xf) << 4) | (WHITE_COL & 0xf));
+    fb_start[1] = (((bg & 0xf) << 4) | (fg & 0xf));
     fb_move_cursor(position);
 }
 
@@ -130,6 +179,8 @@ void write_error_to_screen(char * err_msg, int row){
 
 
 void SCREEN_INIT(void){
-    set_position_initial();
-    write_to_screen(OS_NAME);
+    terminal_name_set(DARK_GREY_COL,WHITE_COL);
+    // set_position_initial();
+    write_to_screen(OS_NAME,BLACK_COL,WHITE_COL);
+    write_to_screen(seperator,BLACK_COL,BLUE_COL);
 }

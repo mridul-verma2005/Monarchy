@@ -5,6 +5,7 @@ static bool extended_flag = false;
 static bool shift_flag = false;
 static bool caps_flag = false;
 static bool release_flag = false;
+static bool enter_command_flag = false;
 
 
 
@@ -14,7 +15,9 @@ const char sc2_to_ascii[256] = {
     [0X42] = 'k',[0X4B] = 'l',[0X3A] = 'm',[0X31] = 'n',[0X44] = 'o',
     [0X4D] = 'p',[0X15] = 'q',[0X2D] = 'r',[0X1B] = 's',[0X2C] = 't',
     [0X3C] = 'u',[0X2A] = 'v',[0X1D] = 'w',[0X22] = 'x',[0X35] = 'y',
-    [0X1A] = 'z', [0X29] = ' ',
+    [0X1A] = 'z',[0X29] = ' ',[0X4C] = ';' ,[0X49] = '.',[0X41] = ',',
+    [0X4E] = '-',[0X55] = '=',[0X54] = '[',[0X5B] = ']',[0X52] = '\'',
+    [0X4A] = '/',[0X5D] = '\\',
 
 
     [0X45] = '0',[0X16] = '1',[0X1E] = '2',[0X26] = '3',[0X25] = '4',
@@ -30,8 +33,9 @@ const char sc2_to_shift_caps_ascii[256] = {
     [0X42] = 'K',[0X4B] = 'L',[0X3A] = 'M',[0X31] = 'N',[0X44] = 'O',
     [0X4D] = 'P',[0X15] = 'Q',[0X2D] = 'R',[0X1B] = 'S',[0X2C] = 'T',
     [0X3C] = 'U',[0X2A] = 'V',[0X1D] = 'W',[0X22] = 'X',[0X35] = 'Y',
-    [0X1A] = 'Z', [0X29] = ' ',
-    
+    [0X1A] = 'Z',[0X29] = ' ',[0X4C] = ':' ,[0X49] = '>',[0X41] = '<',
+    [0X4E] = '_',[0X55] = '+',[0X54] = '{',[0X5B] = '}',[0X52] = '"',
+    [0X4A] = '?',[0X5D] = '|',
     
     [0X45] = ')',[0X16] = '!',[0X1E] = '@',[0X26] = '#',[0X25] = '$',
     [0X2E] = '%',[0X36] = '^',[0X3D] = '&',[0X3E] = '*',[0X46] = '(',
@@ -136,38 +140,46 @@ void keyboard_handler(void){
     }
 
     else if(scancode == ENTER){
-        next_line();
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
         return;
     }
     else if(scancode == L_CTRL || scancode == R_CTRL){
         return;
     }
     else if(scancode == BACKSPACE){
-        back_space();
+        back_space(BLACK_COL,WHITE_COL);
         return;
+    }
+    else if(scancode == TAB){
+        return;
+         
     }
 
     else{
         char ascii;
-        if(shift_flag == true){
+        ascii = sc2_to_ascii[scancode];
+        if(ascii == '\0'){
+            return;
+        }
+        else if(shift_flag == true){
             ascii = sc2_to_shift_caps_ascii[scancode];
-            write_char(ascii,WHITE_COL,BLACK_COL);
+            write_char(ascii,BLACK_COL,WHITE_COL);
         }
         else if(caps_flag == true){
             
             ascii = sc2_to_ascii[scancode];
             if((ascii  <= 57) && (ascii >= 48)){
-                write_char(ascii,WHITE_COL,BLACK_COL);
+                write_char(ascii,BLACK_COL,WHITE_COL);
             }
             else{
                 ascii = sc2_to_shift_caps_ascii[scancode];
-                write_char(ascii,WHITE_COL,BLACK_COL);
+                write_char(ascii,BLACK_COL,WHITE_COL);
                 
             }
         }
         else{
             ascii = sc2_to_ascii[scancode];
-            write_char(ascii,WHITE_COL,BLACK_COL);
+            write_char(ascii,BLACK_COL,WHITE_COL);
         }
     }
 }

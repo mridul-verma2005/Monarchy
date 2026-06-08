@@ -27,7 +27,9 @@
 #define CAPS                                0X58
 #define ENTER                               0X5A
 #define BACKSPACE                           0X66
-
+#define TAB                                 0x0D
+#define UP_KEY                              0X75   // USING EXTENDED
+#define DOWN_KEY                            0X72   // USING EXTENDED
 
 
 void keyboard_handler(void);

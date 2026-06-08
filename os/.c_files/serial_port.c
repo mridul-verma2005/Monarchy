@@ -68,7 +68,7 @@ int serial_port_check(){
 
     }
     else{
-        write_to_screen("cant use serial port 1, printing to screen , aborting loading kernel");
+        write_error_to_screen("cant use serial port 1, printing to screen , aborting loading kernel",13);
         return 1;
         
 
