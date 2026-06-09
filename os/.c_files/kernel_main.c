@@ -19,9 +19,11 @@ int kernel_main(){
     PS2_INIT();
     KEYBOARD_INIT();
     ENABLE_PS2_PORT1_INTERRUPT();
-    SCREEN_INIT();
-    log_info("Kernel Loaded Sucessfully",COM1);
     SHELL_INIT();
+    SCREEN_INIT();
+    write_to_screen("type help to get to know the commands ;)",BLACK_COL,WHITE_COL);
+    next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
+    log_info("Kernel Loaded Sucessfully",COM1);
 
     return 0;
 }

@@ -151,6 +151,7 @@ void keyboard_handler(void){
     }
     else if(scancode == BACKSPACE){
         back_space(BLACK_COL,WHITE_COL);
+        command_buffer_stack_pop();
         return;
     }
     else if(scancode == TAB){

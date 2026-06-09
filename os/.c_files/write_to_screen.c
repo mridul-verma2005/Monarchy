@@ -7,7 +7,7 @@
 static int position = FIRST_FRAMBUFFER_ROW_START;    
 static char* OS_NAME = "Monarchy";
 static char* seperator = "$: ";
-static char* OS_TERMINAL_NAME = "Monarchy Terminal v.0.0.1";
+static char* OS_TERMINAL_NAME = "Monarchy Shell v.0.0.1";
 
 // static char* TEXT_EDITOR = "Text Editor v.0.0.1";
 
