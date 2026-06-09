@@ -20,6 +20,7 @@ void command_buffer_stack_push(char keychar){
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
         write_to_screen("Command is too long cleaning the buffer , please type a correct command",BLACK_COL,WHITE_COL);
         command_buffer_clean(command_buffer, COMMAND_BUFFER_LIMIT_INDEX +1);
+        command_buffer_counter = 0;
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
     command_buffer[command_buffer_counter] = keychar;
