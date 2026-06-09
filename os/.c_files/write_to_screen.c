@@ -121,7 +121,7 @@ void write_char(char ascii_code, uint8_t bg , uint8_t fg){
 
 
 
-void next_line(uint8_t osname_bg , uint8_t osname_fg, uint8_t seperator_bg , uint8_t seperator_fg , int start_row){
+void next_line(uint8_t osname_bg , uint8_t osname_fg, uint8_t seperator_bg , uint8_t seperator_fg , int start_row, bool write_prompt){
     int used_up = position % 80;
     int remaining = 80 -used_up;
     position += remaining;
@@ -129,9 +129,10 @@ void next_line(uint8_t osname_bg , uint8_t osname_fg, uint8_t seperator_bg , uin
         scroll_from_top(start_row);
         clear_line(MAX_ROW_COUNT,osname_bg);
     }
-    // else{
-         write_to_screen(OS_NAME,osname_bg,osname_fg);
+    if(write_prompt == true){
+        write_to_screen(OS_NAME,osname_bg,osname_fg);
         write_to_screen(seperator,seperator_bg,seperator_fg);
+    }
         fb_move_cursor(position);
     
    

@@ -17,10 +17,10 @@ void command_buffer_clean(char *buffer, int buffer_size){
 }
 void command_buffer_stack_push(char keychar){
     if(command_buffer_counter == COMMAND_BUFFER_LIMIT_INDEX){
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
         write_to_screen("Command is too long cleaning the buffer , please type a correct command",BLACK_COL,WHITE_COL);
         command_buffer_clean(command_buffer, COMMAND_BUFFER_LIMIT_INDEX +1);
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
     command_buffer[command_buffer_counter] = keychar;
     command_buffer_counter++;
@@ -73,19 +73,21 @@ void command_parcer(){
 
 
     if(strcmp_d(main_command_buffer, "hello") == true){
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
         write_to_screen(hello_command,BLACK_COL,WHITE_COL);
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
     else if(strcmp_d(main_command_buffer, "clear") == true){
         clear_screen(BLACK_COL,WHITE_COL);
 
     }
     else if(strcmp_d(main_command_buffer, "echo") == true){
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
         write_to_screen(command_buffer+ space +1,BLACK_COL,WHITE_COL);
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
     else if(strcmp_d(main_command_buffer, "help") == true){
-    
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
         int index = 0;
         int help_command_len = strlen_d(help_command);
         for(int i  = 0 ; i < 5 ; i++){
@@ -94,12 +96,16 @@ void command_parcer(){
                 index++;
             }
             index++;
-            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
+            if(i < 4){
+                next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+            }
         }
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
     else{
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
         write_to_screen("Unknown command try help to know the commands",BLACK_COL,WHITE_COL);
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
     command_buffer_clean(command_buffer,COMMAND_BUFFER_LIMIT_INDEX + 1);
     command_buffer_clean(main_command_buffer,MAIN_COMMAND_BUFFER_LIMIT_INDEX + 1);

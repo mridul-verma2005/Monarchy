@@ -140,7 +140,6 @@ void keyboard_handler(void){
     }
 
     else if(scancode == ENTER){
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
         log_info("before the shell",COM1);
         command_retrival();
         log_info("after the shell",COM1);

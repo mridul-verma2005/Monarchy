@@ -22,7 +22,7 @@ int kernel_main(){
     SHELL_INIT();
     SCREEN_INIT();
     write_to_screen("type help to get to know the commands ;)",BLACK_COL,WHITE_COL);
-    next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
+    next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     log_info("Kernel Loaded Sucessfully",COM1);
 
     return 0;
