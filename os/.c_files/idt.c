@@ -8,7 +8,7 @@ extern void* isr_stub_table[];
 
 
 __attribute__ ((noreturn)) void exception_handler(int vector){
-    clear_screen();
+    clear_screen(BLACK_COL,WHITE_COL);
 
     char* vector_string = int_to_string(vector);
     int size_vector_string = strlen_d(vector_string);

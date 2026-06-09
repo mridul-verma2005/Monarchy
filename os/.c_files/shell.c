@@ -7,7 +7,7 @@ static char main_command_buffer[COMMAND_BUFFER_LIMIT_INDEX + 1];
 
 static int command_buffer_counter = 0;
 
-static char hello_command[] = "Hello user i am Monarchy a 32 bit custom OS made by Mridul Verma";
+static char hello_command[] = "Hello user i am Monarchy a 32 bit custom OS.";
 static char help_command[] = "Currenty there are 4 commands :- \n1. Hello just greets you and tell about some stuff related to the OS and the Creator. \n2. echo prints the same thing you typed. \n3. clear just clear the screen like in linux \n4. help tell about the types of command the shell currenly allows.";
 
 void command_buffer_clean(char *buffer, int buffer_size){
@@ -98,7 +98,7 @@ void command_parcer(){
         }
     }
     else{
-        write_to_screen("Unknown command try about to know the commands",BLACK_COL,WHITE_COL);
+        write_to_screen("Unknown command try help to know the commands",BLACK_COL,WHITE_COL);
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1);
     }
     command_buffer_clean(command_buffer,COMMAND_BUFFER_LIMIT_INDEX + 1);
@@ -112,7 +112,7 @@ void command_parcer(){
 
 void command_retrival(void){
     if(command_buffer_stack_top() == '\0'){
-        return;
+        
     }
     log_info("entering command parcer",COM1);
     command_parcer(command_buffer);
