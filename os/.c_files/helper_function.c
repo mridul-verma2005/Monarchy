@@ -4,7 +4,7 @@
 
 char* int_to_string(int number){
     int digit;
-    static char value[3];
+    static char value[12];
     value[2] = '\0';
     value[1] = ' ';
     value[0] = ' ';
@@ -41,7 +41,7 @@ int strlen_d(char* msg){
 
 
 
-void concaternate(char* string_1 , char* string_2 ,char * result){
+void concatenate(char* string_1 , char* string_2 ,char * result){
     int size_1 = strlen_d(string_1);
     int size_2 = strlen_d(string_2);
     int i = 0;

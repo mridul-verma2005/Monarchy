@@ -81,5 +81,5 @@ run : Monarchy.iso
 	$(RUNQEMU) Monarchy.iso -monitor stdio -serial file:serial1.log
 
 clean :
-	rm *.elf *.iso *.o *.log
+	rm -f *.elf *.iso *.o *.log
 	rm -rf iso/

@@ -122,7 +122,7 @@ void command_retrival(void){
         
     }
     log_info("entering command parcer",COM1);
-    command_parcer(command_buffer);
+    command_parcer();
 
 }
 
