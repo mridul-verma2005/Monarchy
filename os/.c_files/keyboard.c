@@ -5,6 +5,7 @@ static bool extended_flag = false;
 static bool shift_flag = false;
 static bool caps_flag = false;
 static bool release_flag = false;
+int up_pressed_count = 0;
 
 
 
@@ -106,7 +107,7 @@ void set_repeat_rate_and_delay(void){
 
 void keyboard_handler(void){
     uint8_t scancode = inb(PS_DATA_PORT);
-    log_info("keybboard",COM1);
+    // log_info("keybboard",COM1);
     if(release_flag == true){
         if(scancode == L_SHIFT || scancode == R_SHIFT){
             shift_flag = false;
@@ -121,8 +122,18 @@ void keyboard_handler(void){
        
     }
     else if(scancode == EXTENDED_SCANCODE_2){
-        extended_flag = true;
+        extended_flag = ~extended_flag;
         return;
+    }
+    else if((scancode == UP_KEY)){
+        // log_info("entered the up key",COM1);
+        while(command_buffer_stack_top() != '\0'){
+            command_buffer_stack_pop();
+            back_space(BLACK_COL,WHITE_COL);
+        }
+        prev_command_show();
+        up_pressed_count_increase();
+         log_info("UP_counter increased",COM1);
     }
     else if(scancode == L_SHIFT || scancode == R_SHIFT){
         shift_flag = true;
@@ -140,9 +151,9 @@ void keyboard_handler(void){
     }
 
     else if(scancode == ENTER){
-        log_info("before the shell",COM1);
+        // log_info("before the shell",COM1);
         command_retrival();
-        log_info("after the shell",COM1);
+        // log_info("after the shell",COM1);
         return;
     }
     else if(scancode == L_CTRL || scancode == R_CTRL){
@@ -195,6 +206,7 @@ void keyboard_handler(void){
 
 
 void KEYBOARD_INIT(void){
+    up_pressed_count = 0;
     get_scancode();
     set_scancode();
     set_repeat_rate_and_delay();

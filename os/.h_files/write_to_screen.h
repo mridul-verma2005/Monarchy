@@ -27,12 +27,15 @@
 #include "move_cursor.h"
 
 
+
 void write_to_screen( char* msg_pointer ,uint8_t bg , uint8_t fg);
 void write_error_to_screen(char * err_msg, int row);
 void clear_screen(uint8_t bg,uint8_t fg );
 void write_char(char ascii_code, uint8_t bg , uint8_t fg);
 void next_line(uint8_t osname_bg , uint8_t osname_fg, uint8_t seperator_bg , uint8_t seperator_fg, int start_row, bool write_prompt);
 void back_space(uint8_t bg , uint8_t fg);
+void clear_line(int row , uint8_t bg);
+void clear_current_line(uint8_t bg,uint8_t osname_bg,uint8_t osname_fg,uint8_t seperator_bg,uint8_t seperator_fg);
 void SCREEN_INIT(void);
 
 #endif

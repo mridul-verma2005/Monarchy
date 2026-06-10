@@ -27,6 +27,13 @@ void clear_screen(uint8_t bg ,uint8_t fg){
     
 }
 
+void clear_current_line(uint8_t bg,uint8_t osname_bg,uint8_t osname_fg,uint8_t seperator_bg,uint8_t seperator_fg){
+    clear_line(position/80,bg);
+    position -= position %80;
+    write_to_screen(OS_NAME,osname_bg,osname_fg);
+    write_to_screen(seperator,seperator_bg,seperator_fg);
+}
+
 void clear_line(int row , uint8_t bg){
 
     char* fb_start = (char*) FRAMEBUFFER_START;
