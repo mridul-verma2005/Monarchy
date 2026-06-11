@@ -307,7 +307,7 @@ void SHELL_INIT(void){
     for(int i = 0 ; i < COMMAND_LIMIT_INDEX + 1; i++){
         command_buffer_clean(command_retriver_array[i],COMMAND_BUFFER_LIMIT_INDEX + 1);
     }
-
+    up_pressed_count = 0;
     command_buffer_counter = 0;
     current_command_counter = 0;
 

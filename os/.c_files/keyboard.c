@@ -5,7 +5,7 @@ static bool extended_flag = false;
 static bool shift_flag = false;
 static bool caps_flag = false;
 static bool release_flag = false;
-int up_pressed_count = 0;
+
 
 
 
@@ -209,7 +209,6 @@ void keyboard_handler(void){
 
 
 void KEYBOARD_INIT(void){
-    up_pressed_count = 0;
     get_scancode();
     set_scancode();
     set_repeat_rate_and_delay();
