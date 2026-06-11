@@ -163,8 +163,13 @@ void command_parcer(){
     else if(strcmp_d(main_command_buffer, "echo") == true){
 
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
-
-        write_to_screen(command_buffer+ space +1,BLACK_COL,WHITE_COL);
+        if(space == 0){
+            write_to_screen(" ",BLACK_COL,WHITE_COL);
+        }
+        else{
+            write_to_screen(command_buffer+ space +1,BLACK_COL,WHITE_COL);
+        }
+        
 
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
