@@ -16,5 +16,7 @@ char command_buffer_stack_pop(void);
 char command_buffer_stack_top(void);
 void command_retrival(void);
 void prev_command_show();
-void up_pressed_count_increase();
+void up_pressed_count_increase(void);
+void up_pressed_count_to_zero(void);
+int current_up_pressed_value(void);
 #endif

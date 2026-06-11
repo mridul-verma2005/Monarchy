@@ -1,25 +1,39 @@
 #include "../.h_files/shell.h"
 
 #define COMMAND_BUFFER_LIMIT_INDEX            255
-#define COMMAND_LIMIT_INDEX                   16  
+#define COMMAND_LIMIT_INDEX                   15 
 static char command_buffer[COMMAND_BUFFER_LIMIT_INDEX + 1];
 static char main_command_buffer[COMMAND_BUFFER_LIMIT_INDEX + 1];  
 static char command_retriver_array[COMMAND_LIMIT_INDEX + 1][COMMAND_BUFFER_LIMIT_INDEX + 1];
 
-
+static int total_argument_in_help = 6;
+static int total_commands_in_help = 5;
 static int current_command_counter = 0;  // for the command_retrival array
 static int command_buffer_counter = 0;   // for the command_buffer
+static int up_pressed_count = 0;
 
 static char hello_command[] = "Hello user i am Monarchy a 32 bit custom OS.";
-static char help_command[] = "Currenty there are 4 commands :- \n1. Hello just greets you and tell about some stuff related to the OS and the Creator. \n2. echo prints the same thing you typed. \n3. clear just clear the screen like in linux \n4. help tell about the types of command the shell currenly allows.";
-static int up_pressed_count = 0;
+static char help_command[] =
+    "Currently there are 4 commands:\n"
+    "1. hello just greets you and tells about some stuff related "
+    "to the OS and the creator.\n"
+    "2. echo prints the same thing you typed.\n"
+    "3. clear just clears the screen like in Linux.\n"
+    "4. help tells about the types of commands the shell "
+    "currently allows.\n"
+    "5. the cbuff will clean the command history , the shell can currently hold upto 16 previous command and the least recently used is removed."
+    ;
+
 
 void up_pressed_count_increase(){
     up_pressed_count++;
 }
 
-void up_pressed_count_decrease(){
-    up_pressed_count--;
+void up_pressed_count_to_zero(){
+    up_pressed_count = 0;
+}
+int current_up_pressed_value(){
+    return up_pressed_count;
 }
 
 void make_space_command_retriver(){
@@ -38,12 +52,15 @@ void make_space_command_retriver(){
 }
 
 void command_saver(){
+    if(command_buffer[0] == '\0' || command_buffer[0] == ' '){
+        return;
+    }
     log_info("entered the command saver",COM1);
     for(int i = 0 ; i < COMMAND_BUFFER_LIMIT_INDEX + 1 ; i++){
-        if(current_command_counter == 15){
+        if(current_command_counter == 16){
             make_space_command_retriver();
         }
-        command_retriver_array[current_command_counter][i] = main_command_buffer[i];
+        command_retriver_array[current_command_counter][i] = command_buffer[i];
         
     }
     current_command_counter++;
@@ -56,6 +73,14 @@ void command_buffer_clean(char *buffer, int buffer_size){
 
         buffer[start] = '\0';
     }
+}
+
+void clear_command_history(){
+    for(int i = 0 ; i < COMMAND_LIMIT_INDEX + 1; i++){
+        command_buffer_clean(command_retriver_array[i],COMMAND_BUFFER_LIMIT_INDEX + 1);
+    }
+    current_command_counter = 0;
+
 }
 
 
@@ -156,15 +181,19 @@ void command_parcer(){
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
     else if(strcmp_d(main_command_buffer, "clear") == true){
-
-        clear_screen(BLACK_COL,WHITE_COL);
-
+        // if(strcmp_d(command_buffer + space +1 , "-b")){
+        //     clear_command_history();
+        // }
+        // else{
+            clear_screen(BLACK_COL,WHITE_COL);
+        // 
+        
     }
     else if(strcmp_d(main_command_buffer, "echo") == true){
 
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
         if(space == 0){
-            write_to_screen(" ",BLACK_COL,WHITE_COL);
+            write_to_screen(" ",BLACK_COL,WHITE_COL);       // echo issued fixed , as there wasnt any space used so the space value was still 0 and it was using that 
         }
         else{
             write_to_screen(command_buffer+ space +1,BLACK_COL,WHITE_COL);
@@ -180,7 +209,7 @@ void command_parcer(){
         int index = 0;
         int help_command_len = strlen_d(help_command);
 
-        for(int i  = 0 ; i < 5 ; i++){
+        for(int i  = 0 ; i < total_argument_in_help ; i++){
 
             while(help_command[index] != '\n' && index < help_command_len){
 
@@ -190,12 +219,20 @@ void command_parcer(){
 
             index++;
 
-            if(i < 4){
+            if(i < total_commands_in_help){
 
                 next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
 
             }
         }
+
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+    }
+    else if(strcmp_d(main_command_buffer, "cbuff") == true){
+        clear_command_history();
+         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+
+        write_to_screen("command history cleared",BLACK_COL,WHITE_COL);
 
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
@@ -207,7 +244,9 @@ void command_parcer(){
 
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
-    command_saver();
+    // if(strcmp_d(main_command_buffer,"cbuff") == false){
+        command_saver();
+    
     command_buffer_clean(command_buffer,COMMAND_BUFFER_LIMIT_INDEX + 1);
     command_buffer_clean(main_command_buffer,COMMAND_BUFFER_LIMIT_INDEX + 1);
 
@@ -235,8 +274,9 @@ void command_retrival(void){
 void prev_command_show(){
     // log_info("entered prev command",COM1);
     if(current_command_counter == 0){
-        clear_current_line(BLACK_COL,BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL);       
-        write_to_screen("no commands to retrive",BLACK_COL,WHITE_COL);
+        clear_current_line(BLACK_COL,BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL);      // prints noting now 
+        up_pressed_count = 0; 
+        return;
     }
     else{
         while(command_buffer_stack_top() != '\0'){
@@ -244,10 +284,10 @@ void prev_command_show(){
         }
         int i = 0;
         int which_command_shown = 0;
-        if(current_command_counter - up_pressed_count < 0){
+        if(current_command_counter -1 - up_pressed_count < 0){
             up_pressed_count = 0;
         }
-        which_command_shown = current_command_counter - up_pressed_count;
+        which_command_shown = current_command_counter -1 - up_pressed_count;
         while(command_retriver_array[which_command_shown][i] != '\0'){
             command_buffer_stack_push(command_retriver_array[which_command_shown][i]);
             write_char(command_retriver_array[which_command_shown][i],BLACK_COL,WHITE_COL);
@@ -256,6 +296,8 @@ void prev_command_show(){
 
     }
 }
+
+
 
 
 void SHELL_INIT(void){

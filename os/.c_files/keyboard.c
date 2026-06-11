@@ -161,6 +161,9 @@ void keyboard_handler(void){
     }
     else if(scancode == BACKSPACE){
         back_space(BLACK_COL,WHITE_COL);
+        if(current_up_pressed_value() != 0){
+            up_pressed_count_to_zero();
+        }
         command_buffer_stack_pop();
         return;
     }
