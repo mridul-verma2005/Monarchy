@@ -8,6 +8,7 @@
 #include "helper_function.h"
 #include "keyboard.h"
 #include "pit.h"
+#include "cmos.h"
 
 #define MAX_DESCRIPTOR          256
 #define TASK_FLAGS              0X8F

@@ -6,22 +6,24 @@ static char command_buffer[COMMAND_BUFFER_LIMIT_INDEX + 1];
 static char main_command_buffer[COMMAND_BUFFER_LIMIT_INDEX + 1];  
 static char command_retriver_array[COMMAND_LIMIT_INDEX + 1][COMMAND_BUFFER_LIMIT_INDEX + 1];
 
-static int total_argument_in_help = 6;
-static int total_commands_in_help = 5;
+static int total_argument_in_help = 8;
+static int total_commands_in_help = 7;
 static int current_command_counter = 0;  // for the command_retrival array
 static int command_buffer_counter = 0;   // for the command_buffer
 static int up_pressed_count = 0;
 
 static char hello_command[] = "Hello user i am Monarchy a 32 bit custom OS.";
 static char help_command[] =
-    "Currently there are 4 commands:\n"
-    "1. hello just greets you and tells about some stuff related "
+    "Currently there are 7 commands:\n"
+    " 1. hello just greets you and tells about some stuff related "
     "to the OS and the creator.\n"
-    "2. echo prints the same thing you typed.\n"
-    "3. clear just clears the screen like in Linux.\n"
-    "4. help tells about the types of commands the shell "
+    " 2. echo prints the same thing you typed.\n"
+    " 3. clear just clears the screen like in Linux. but the clear -b will clear the command history, currenly the shell can upto 16 command in a LRU manner use up arrow key to access them\n"
+    " 4. help tells about the types of commands the shell "
     "currently allows.\n"
-    "5. the cbuff will clean the command history , the shell can currently hold upto 16 previous command and the least recently used is removed."
+    " 5. fetch will show a cool ascii art (credit Joan Stark) and will display sys info.\n"
+    " 6. time will show the current local time.\n"
+    " 7. uptime will show the system uptime\n"
     ;
 
 
@@ -254,6 +256,30 @@ void command_parcer(){
 
         }
     }
+    else if(strcmp_d(main_command_buffer , "fetch")){
+        if((space_checker(space) ==0)){
+            incorrect_flags("hey there is no known flag with fetch, try help (no flag)");
+        }
+        else{
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+            show_logo(BLACK_COL,WHITE_COL);
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+
+        }
+    }
+
+     else if(strcmp_d(main_command_buffer , "noice")){
+        if((space_checker(space) ==0)){
+            incorrect_flags("hey there is no known flag with noice, try help (no flag)");
+        }
+        else{
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+            write_to_screen("it is indeed noice",BLACK_COL , WHITE_COL);
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+
+        }
+    }
+
 
     else{
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);

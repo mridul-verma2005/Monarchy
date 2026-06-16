@@ -9,7 +9,25 @@ static char* OS_NAME = "Monarchy";
 static char* seperator = "$: ";
 static char* OS_TERMINAL_NAME = "Monarchy Shell v.0.0.1";
 
+static char* logo[] =  {"            _            ",
+                        "          _\\ /_          ",
+                        "          >_X_<          ",
+                        "   .---._  /_\\  _.---.   ",
+                       " /`.---._`{/ \\}`_.---.`\\ ",
+                       "| /   ___`{\\_/}`___   \\ |",
+                       "\\ \\.\"`*  `\"{_}\"`  *`\"./ /",
+                       " \\ \\  )\\  _\\ /_  /(  / / ",
+                       "  \\ *<()( >_X_< )()>* /  ",
+                       "   |._)/._./_\\._.\\(_.|   ",
+                       "   |() () () () () ()|   ",
+                       "   <<o>><<o>><o>><<o>>   ",
+                       "  `\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"`  "};
+
+static char* description[] = {"  host user","  ---------","  OS: Monarchy 0.0.1", "  Uptime: ", "  Shell: Monarchy Shell 0.0.1", "  Resolution: 20*80, VGA text buffer"};
+
 // static char* TEXT_EDITOR = "Text Editor v.0.0.1";
+
+
 
 
 void clear_screen(uint8_t bg ,uint8_t fg){
@@ -136,10 +154,28 @@ void show_time(uint8_t bg , uint8_t fg){
 }
 
 void show_uptime(uint8_t bg , uint8_t fg){
-    write_to_screen(int_to_string(get_uptime()), bg, fg);
-    write_to_screen(" minutes", bg, fg);
+    write_to_screen(int_to_string(get_uptime_days()), bg, fg);
+    write_to_screen(" days, ", bg, fg);
+    write_to_screen(int_to_string(get_uptime_hrs()), bg, fg);
+    write_to_screen(" hours, ", bg, fg);
+    write_to_screen(int_to_string(get_uptime_min()), bg, fg);
+    write_to_screen(" minutes, ", bg, fg);
+    write_to_screen(int_to_string(get_uptime_sec()), bg, fg);
+    write_to_screen(" seconds", bg, fg);
 
 }
+
+// void get_uptime_string(){
+//     char* days = int_to_string(get_uptime_days());
+//     char* hrs = int_to_string(get_uptime_hrs());
+//     char* min = int_to_string(get_uptime_min());
+//     char* sec = int_to_string(get_uptime_sec());
+//     int total_size = strlen_d(days)  + strlen_d(" days,")+ strlen_d(hrs) +strlen_d(" hours,") + strlen_d(min) +strlen_d(" minutes,")+ strlen_d(sec) + strlen_d(" seconds") + 1;
+//     char uptime_arra
+
+// }
+
+
 
 
 
@@ -198,6 +234,34 @@ void write_error_to_screen(char * err_msg, int row){
     fb_move_cursor((row *80 -1) + i + j);
 
 }
+
+void show_logo(uint8_t bg , uint8_t fg){
+    char* fb_start = (char*) FRAMEBUFFER_START;
+    int i = 0;
+
+    while(i < 2000){
+        fb_start[2*i] = ' ';
+        fb_start[2*i + 1] = ((bg & 0xf) << 4) | (fg & 0xf);
+        i++;
+    }
+    position = FIRST_FRAMBUFFER_ROW_START;
+    next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+    terminal_name_set(DARK_GREY_COL,WHITE_COL);
+    int logo_rows = 13;
+    int info_row = 6;
+    for(int i = 0 ; i < logo_rows;i++){
+        write_to_screen(logo[i],bg , fg);
+        if(i < info_row){
+            write_to_screen(description[i],bg,fg);
+            if(strcmp_d(description[i],"  Uptime: ")){  
+                show_uptime(bg , fg);
+            }
+            
+        }
+        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+    }
+}
+
 
 
 

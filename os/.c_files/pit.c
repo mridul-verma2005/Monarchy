@@ -29,17 +29,17 @@ void clock_update(void){
 
 }
 int get_hr(void){
-    int hr = SYSTEM_CLOCK_SECONDS / 3600;
+    int hr = USER_CLOCK_SECONDS / 3600;
     return hr;
 }
 
 int get_minutes(void){
-    int min = (SYSTEM_CLOCK_SECONDS % 3600) / 60;
+    int min = (USER_CLOCK_SECONDS % 3600) / 60;
     return min;
 }
 
 int get_seconds(void){
-    int sec = SYSTEM_CLOCK_SECONDS % 60;
+    int sec = USER_CLOCK_SECONDS % 60;
     return sec;
 }
 
@@ -50,10 +50,30 @@ void set_time(int hour , int minutes , int seconds){  // using a 24 hr format
     USER_CLOCK_SECONDS = total_elapsed_second;
 }
 
-int get_uptime(void){
-    int min = (SYSTEM_CLOCK_SECONDS % 3600) / 60;
+
+
+
+
+int get_uptime_days(void){
+    int days = SYSTEM_CLOCK_SECONDS / 86400;
+    return days;
+}
+
+int get_uptime_hrs(void){
+    int hrs = (SYSTEM_CLOCK_SECONDS %86400 ) / 3600;
+    return hrs;
+}
+
+int get_uptime_min(void){
+    int min = ((SYSTEM_CLOCK_SECONDS % 86400) % 3600) / 60 ;
     return min;
 }
+
+int get_uptime_sec(void){
+    int sec = SYSTEM_CLOCK_SECONDS % 60;
+    return sec;
+}
+
 
 
 void PIT_INIT(){

@@ -17,8 +17,10 @@
 #include "pit.h"
 #include "write_to_serial.h"
 
+
 void CMOS_INIT(void);
 bool get_time_set_flag(void);
+void set_time_from_cmos(void);
 
 
 

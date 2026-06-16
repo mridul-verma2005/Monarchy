@@ -1,21 +1,67 @@
 #include "../.h_files/helper_function.h"
 
+int digit_counter(int number){
+    int digit = 0;
+    while(number > 0){
+        number = number/10;
+        digit++;
+    }
+    return digit;
+}
 
+// char* int_to_string(int number){
+//     int digit;
+//     static char value[3];
+//     value[2] = '\0';
+//     value[1] = ' ';
+//     value[0] = ' ';
+//     if(number == 0){
+//         value[0] = '0';
+//         value[1] = '0';
+//         return value;
+//     }
+        
+//     else{
+//         int i = 1;
+//         while(number > 0 && i >= 0){
+//             digit = number % 10;
+//             value[i] = '0' + digit;
+//             number /= 10;
+//             i--;
+//         }
+//     }
+//     if(value[0] == ' '){
+//         value[0] = '0';
+//     }
+    
+//     return value;
+// }
 
 char* int_to_string(int number){
-    int digit;
-    static char value[3];
-    value[2] = '\0';
-    value[1] = ' ';
-    value[0] = ' ';
+    static char value[5];
+    for(int i = 0 ; i < 5 ; i++){
+        value[i] = '\0';
+    }
+
     if(number == 0){
         value[0] = '0';
         value[1] = '0';
+        value[2] = '\0';
+        value[3] = '\0';
+        value[4] = '\0';
         return value;
     }
         
     else{
-        int i = 1;
+        int digit = digit_counter(number);
+        int i;
+        if(digit >= 2){
+            i = digit -1;
+        }
+
+        else{
+            i = 1;
+        }
         while(number > 0 && i >= 0){
             digit = number % 10;
             value[i] = '0' + digit;
@@ -23,7 +69,7 @@ char* int_to_string(int number){
             i--;
         }
     }
-    if(value[0] == ' '){
+    if(value[0] == '\0'){
         value[0] = '0';
     }
     

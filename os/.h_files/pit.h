@@ -26,6 +26,10 @@ int get_seconds(void);
 int get_uptime(void);
 void PIT_INIT(void);
 void set_time(int hour , int minutes, int seconds);
+int get_uptime_days(void);
+int get_uptime_hrs(void);
+int get_uptime_min(void);
+int get_uptime_sec(void);
 
 
 #endif

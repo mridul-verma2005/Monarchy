@@ -2,7 +2,7 @@ NAMSFLAGS = -f elf
 GCCFLAGS = -m32 -nostdlib -nostdinc -fno-builtin 
 GCCFLAGS += -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -I.h_files/
 LINKERFLAGS =  -T .ld_files/link.ld -m elf_i386
-RUNQEMU = qemu-system-i386
+RUNQEMU = qemu-system-i386 -rtc base=localtime
 FILES_KERNEL = loader.o io.o gdt_init.o gdt.o kernel_main.o move_cursor.o serial_port.o write_to_screen.o 
 FILES_KERNEL += write_to_serial.o idt.o idt_isr.o pic.o helper_function.o ps2.o keyboard.o bss_cleaning.o shell.o pit.o cmos.o
 FILES_ISO = kernel.elf .cfg_files/grub.cfg serial1.log 

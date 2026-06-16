@@ -47,7 +47,8 @@ void interupt_handler(int vector){
         keyboard_handler();
     }
     else if(irq == 8){
-
+        log_info("entered the irq 8 handler",COM1);
+        set_time_from_cmos();
     }
     
     else 
