@@ -25,6 +25,7 @@
 #include "helper_function.h"
 #include "types.h"
 #include "move_cursor.h"
+#include "pit.h"
 
 
 
@@ -36,6 +37,8 @@ void next_line(uint8_t osname_bg , uint8_t osname_fg, uint8_t seperator_bg , uin
 void back_space(uint8_t bg , uint8_t fg);
 void clear_line(int row , uint8_t bg);
 void clear_current_line(uint8_t bg,uint8_t osname_bg,uint8_t osname_fg,uint8_t seperator_bg,uint8_t seperator_fg);
+void show_time(uint8_t bg , uint8_t fg);
+void show_uptime(uint8_t bg , uint8_t fg);
 void SCREEN_INIT(void);
 
 #endif

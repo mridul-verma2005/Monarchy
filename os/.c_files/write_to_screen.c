@@ -102,15 +102,7 @@ void terminal_name_set(uint8_t osname_bg , uint8_t osname_fg){
 
 }
 
-void write_to_screen(char* msg_pointer, uint8_t bg , uint8_t fg){
 
-    int msg_len = strlen_d(msg_pointer);
-
-    for(int i = 0 ; i < msg_len ; i++){
-        write_char(msg_pointer[i],bg,fg);
-    }
-    
-}
 
 void write_char(char ascii_code, uint8_t bg , uint8_t fg){
     if(position >= 2000){
@@ -123,6 +115,30 @@ void write_char(char ascii_code, uint8_t bg , uint8_t fg){
     fb_start[1] = (((bg & 0xf) << 4) | (fg & 0xf));
     position++;
     fb_move_cursor(position);
+}
+
+void write_to_screen(char* msg_pointer, uint8_t bg , uint8_t fg){
+
+    int msg_len = strlen_d(msg_pointer);
+
+    for(int i = 0 ; i < msg_len ; i++){
+        write_char(msg_pointer[i],bg,fg);
+    }
+    
+}
+
+void show_time(uint8_t bg , uint8_t fg){
+    write_to_screen(int_to_string(get_hr()), bg, fg);
+    write_char(':', bg, fg);
+    write_to_screen(int_to_string(get_minutes()), bg, fg);
+    write_char(':', bg, fg);
+    write_to_screen(int_to_string(get_seconds()), bg, fg);
+}
+
+void show_uptime(uint8_t bg , uint8_t fg){
+    write_to_screen(int_to_string(get_uptime()), bg, fg);
+    write_to_screen(" minutes", bg, fg);
+
 }
 
 

@@ -133,7 +133,7 @@ void keyboard_handler(void){
         }
         prev_command_show();
         up_pressed_count_increase();
-         log_info("UP_counter increased",COM1);
+        //  log_info("UP_counter increased",COM1);
     }
     else if(scancode == L_SHIFT || scancode == R_SHIFT){
         shift_flag = true;

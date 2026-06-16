@@ -1,5 +1,6 @@
 extern exception_handler
 extern interupt_handler
+extern clock_update
 global isr_stub_table
 
 %macro isr_err_stub 1
@@ -7,7 +8,7 @@ global isr_stub_table
     push dword %1
     call exception_handler
     add esp , 8
-    iret
+    iretd
 %endmacro
 
 
@@ -16,8 +17,9 @@ global isr_stub_table
     push dword %1
     call exception_handler
     add esp , 4
-    iret
+    iretd
 %endmacro
+
 
 ; %macro isr_keyboard_hardware_stub 1
 ;     isr_stub_%1:
@@ -32,7 +34,7 @@ global isr_stub_table
     push dword %1
     call interupt_handler
     add esp , 4
-    iret
+    iretd
 %endmacro
 
 isr_no_err_stub 0

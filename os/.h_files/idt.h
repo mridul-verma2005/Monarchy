@@ -7,6 +7,7 @@
 #include "pic.h"
 #include "helper_function.h"
 #include "keyboard.h"
+#include "pit.h"
 
 #define MAX_DESCRIPTOR          256
 #define TASK_FLAGS              0X8F
@@ -31,7 +32,7 @@ typedef struct {
 
 
 
-__attribute__ ((noreturn)) void exception_handler(int vector);
+void exception_handler(int vector);
 void interupt_handler(int irq);
 void IDT_SET_DESCRIPTOR(uint8_t vector , void* isr_address  , uint8_t flags);
 void IDT_INIT();

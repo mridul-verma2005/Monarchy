@@ -7,7 +7,8 @@ extern void* isr_stub_table[];
 
 
 
-__attribute__ ((noreturn)) void exception_handler(int vector){
+void exception_handler(int vector){
+   
     clear_screen(BLACK_COL,WHITE_COL);
 
     char* vector_string = int_to_string(vector);
@@ -30,8 +31,8 @@ __attribute__ ((noreturn)) void exception_handler(int vector){
 
     write_error_to_screen(screen_result,13);
     log_info(log_result , COM1);
-    __asm__ volatile ("cli; hlt");
-    while(1);
+    
+    
 }
 
 
@@ -39,10 +40,17 @@ __attribute__ ((noreturn)) void exception_handler(int vector){
 
 void interupt_handler(int vector){
     int irq = vector - 32;
-    if(irq == 1){
+    if(irq == 0){
+        clock_update();
+    }
+    else if(irq == 1){
         keyboard_handler();
     }
-    else
+    else if(irq == 8){
+
+    }
+    
+    else 
     {
         char* irq_string = int_to_string(irq);
         int size_irq_string = strlen_d(irq_string);
@@ -63,7 +71,7 @@ void interupt_handler(int vector){
         concaternate(err_msg_log, irq_string, log_result);
    
         write_error_to_screen(screen_result,13);
-        log_info(log_result , COM1);
+        // log_info(log_result , COM1);
     
     }
     PIC_SEND_EOI(irq);

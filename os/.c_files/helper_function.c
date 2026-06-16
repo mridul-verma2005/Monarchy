@@ -77,6 +77,16 @@ bool strcmp_d(char* str1 , char* str2){
     return is_same;
 }
 
+int string_to_int(char *string, int start_index , int end_index){
+    int number  = 0;
+    for(int i = start_index ; i < end_index ; i++){
+        int value = string[i]  - '0';
+        number = number * 10 + value;
+    }
+    return number;
+
+}
+
 
 
 

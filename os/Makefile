@@ -4,7 +4,7 @@ GCCFLAGS += -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Wer
 LINKERFLAGS =  -T .ld_files/link.ld -m elf_i386
 RUNQEMU = qemu-system-i386
 FILES_KERNEL = loader.o io.o gdt_init.o gdt.o kernel_main.o move_cursor.o serial_port.o write_to_screen.o 
-FILES_KERNEL += write_to_serial.o idt.o idt_isr.o pic.o helper_function.o ps2.o keyboard.o bss_cleaning.o shell.o
+FILES_KERNEL += write_to_serial.o idt.o idt_isr.o pic.o helper_function.o ps2.o keyboard.o bss_cleaning.o shell.o pit.o cmos.o
 FILES_ISO = kernel.elf .cfg_files/grub.cfg serial1.log 
 FILES_EXE = Monarchy.iso kernel.elf serial1.log
 
@@ -76,6 +76,12 @@ bss_cleaning.o : .c_files/bss_cleaning.c
 shell.o : .c_files/shell.c .h_files/shell.h .h_files/write_to_screen.h 
 	gcc $(GCCFLAGS) .c_files/shell.c -o shell.o
 
+
+pit.o : .c_files/pit.c .h_files/pit.h .h_files/types.h 
+	gcc $(GCCFLAGS) .c_files/pit.c -o pit.o
+
+cmos.o : .c_files/cmos.c .h_files/cmos.h .h_files/types.h 
+	gcc $(GCCFLAGS) .c_files/cmos.c -o cmos.o
 
 run : Monarchy.iso 
 	$(RUNQEMU) Monarchy.iso -monitor stdio -serial file:serial1.log

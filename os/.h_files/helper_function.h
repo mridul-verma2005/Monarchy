@@ -7,6 +7,7 @@ char* int_to_string(int number);
 int strlen_d(char* msg);
 void concaternate(char* string_1 , char* string_2 ,char * result);
 bool strcmp_d(char* str1 , char* str2);
+int string_to_int(char *string, int start_index , int end_index);
 
 
 

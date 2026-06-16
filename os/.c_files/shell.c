@@ -32,9 +32,25 @@ void up_pressed_count_increase(){
 void up_pressed_count_to_zero(){
     up_pressed_count = 0;
 }
+
 int current_up_pressed_value(){
     return up_pressed_count;
 }
+
+int space_checker(int start){
+    if(start == 0){
+        return 1;
+    }
+    int i = 0;
+    while((command_buffer + start + 1)[i] != '\0'){
+        if((command_buffer + start + 1)[i] != ' '){
+            return 0;
+        }
+        i++;
+    }
+    return 1;
+}
+
 
 void make_space_command_retriver(){
     int current_buffer = 0;
@@ -55,7 +71,7 @@ void command_saver(){
     if(command_buffer[0] == '\0' || command_buffer[0] == ' '){
         return;
     }
-    log_info("entered the command saver",COM1);
+    // log_info("entered the command saver",COM1);
     for(int i = 0 ; i < COMMAND_BUFFER_LIMIT_INDEX + 1 ; i++){
         if(current_command_counter == 16){
             make_space_command_retriver();
@@ -64,13 +80,11 @@ void command_saver(){
         
     }
     current_command_counter++;
-    log_info("counter increased",COM1);
+    // log_info("counter increased",COM1);
 }
 
 void command_buffer_clean(char *buffer, int buffer_size){
-
     for(int start = 0 ; start < buffer_size ; start++){
-
         buffer[start] = '\0';
     }
 }
@@ -86,18 +100,13 @@ void clear_command_history(){
 
 
 void command_buffer_stack_push(char keychar){
-
     if(command_buffer_counter == COMMAND_BUFFER_LIMIT_INDEX){
-
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
         write_to_screen("Command is too long cleaning the buffer , please type a correct command",BLACK_COL,WHITE_COL);
         command_buffer_clean(command_buffer, COMMAND_BUFFER_LIMIT_INDEX +1);
-
         command_buffer_counter = 0;
-
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
-
     command_buffer[command_buffer_counter] = keychar;
     command_buffer_counter++;
     command_buffer[command_buffer_counter] = '\0';
@@ -106,145 +115,147 @@ void command_buffer_stack_push(char keychar){
 
 
 char command_buffer_stack_pop(void){
-
     char result;
-
     if(command_buffer_counter == 0){
-
         result = command_buffer[command_buffer_counter];
         command_buffer[command_buffer_counter] = '\0';
-        
     }
-
     else {
-
         result = command_buffer[command_buffer_counter-1];
         command_buffer[command_buffer_counter-1] = '\0';
         command_buffer_counter--;
-
     }
-
     return result;
 }
 
 char command_buffer_stack_top(void){
-
     char result;
-
     if(command_buffer_counter == 0){
-
         result = command_buffer[command_buffer_counter];
     }
     else {
-
         result = command_buffer[command_buffer_counter-1];
     }
-
     return result;
    
 }
 
+void incorrect_flags(char* msg){
+    next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+    write_to_screen(msg,BLACK_COL,WHITE_COL);
+    next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+}
 
 void command_parcer(){
-
     // log_info("entered command parcer",COM1);
-
     int space = 0;
-
     for(int start = 0 ; start < COMMAND_BUFFER_LIMIT_INDEX +1 ; start++){
-
         if(command_buffer[start] == ' '  || command_buffer[start] == '\0' ){
-
             if(command_buffer[start] == ' ' ){
-
                 space = start;
             }
-           
             break;
         }
 
         else{
-
             main_command_buffer[start] = command_buffer[start];
-
         }
 
     }
 
 
     if(strcmp_d(main_command_buffer, "hello") == true){
-
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
-
-        write_to_screen(hello_command,BLACK_COL,WHITE_COL);
-
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+        if((space_checker(space) ==0)){
+            incorrect_flags("hey there is no known flag with hello, try help (no flag)");
+        }
+        else{
+             next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+            write_to_screen(hello_command,BLACK_COL,WHITE_COL);
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+        }
+       
     }
+
     else if(strcmp_d(main_command_buffer, "clear") == true){
-        // if(strcmp_d(command_buffer + space +1 , "-b")){
-        //     clear_command_history();
-        // }
-        // else{
+        if(strcmp_d(command_buffer + space +1 , "-b")){
+            clear_command_history();
+        }
+        if(strcmp_d(command_buffer + space +1 , "-b") == false){
+            incorrect_flags("hey this is not a known flag with clear, try help (no flag)");
+        }
+        else{
             clear_screen(BLACK_COL,WHITE_COL);
-        // 
+        }
         
     }
-    else if(strcmp_d(main_command_buffer, "echo") == true){
 
+    else if(strcmp_d(main_command_buffer, "echo") == true){
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
-        if(space == 0){
+        if(space_checker(space) == 1){
             write_to_screen(" ",BLACK_COL,WHITE_COL);       // echo issued fixed , as there wasnt any space used so the space value was still 0 and it was using that 
         }
         else{
             write_to_screen(command_buffer+ space +1,BLACK_COL,WHITE_COL);
         }
         
-
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
+
     else if(strcmp_d(main_command_buffer, "help") == true){
-
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
-
-        int index = 0;
-        int help_command_len = strlen_d(help_command);
-
-        for(int i  = 0 ; i < total_argument_in_help ; i++){
-
-            while(help_command[index] != '\n' && index < help_command_len){
-
-                write_char(help_command[index],BLACK_COL,WHITE_COL);
-                index++;
-            }
-
-            index++;
-
-            if(i < total_commands_in_help){
-
-                next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
-
-            }
+        if((space_checker(space) ==0)){
+            incorrect_flags("hey there is no known flag with help, try help (no flag)");
         }
-
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+        else{
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+            int index = 0;
+            int help_command_len = strlen_d(help_command);
+            for(int i  = 0 ; i < total_argument_in_help ; i++){
+                while(help_command[index] != '\n' && index < help_command_len){
+                    write_char(help_command[index],BLACK_COL,WHITE_COL);
+                    index++;
+                }
+                index++;
+                if(i < total_commands_in_help){
+                    next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+                }
+            }
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+            
+        }
+        
     }
-    else if(strcmp_d(main_command_buffer, "cbuff") == true){
-        clear_command_history();
-         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
 
-        write_to_screen("command history cleared",BLACK_COL,WHITE_COL);
 
-        next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+    else if (strcmp_d(main_command_buffer , "time")){
+        if((space_checker(space) ==0)){
+            incorrect_flags("hey there is no known flag with time, try help (no flag)");
+        }
+        else{
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+            show_time(BLACK_COL,WHITE_COL);
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+
+        }
+        
     }
+
+    else if(strcmp_d(main_command_buffer , "uptime")){
+        if((space_checker(space) ==0)){
+            incorrect_flags("hey there is no known flag with uptime, try help (no flag)");
+        }
+        else{
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+            show_uptime(BLACK_COL,WHITE_COL);
+            next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
+
+        }
+    }
+
     else{
-
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
-
         write_to_screen("Unknown command try help to know the commands",BLACK_COL,WHITE_COL);
-
         next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
     }
-    // if(strcmp_d(main_command_buffer,"cbuff") == false){
         command_saver();
     
     command_buffer_clean(command_buffer,COMMAND_BUFFER_LIMIT_INDEX + 1);
@@ -252,7 +263,6 @@ void command_parcer(){
 
     command_buffer_counter = 0;
 
-    // log_info("leaving command parcer",COM1);
     
    
 }
@@ -266,13 +276,13 @@ void command_retrival(void){
 
     }
 
-    log_info("entering command parcer",COM1);
+    
     command_parcer();
 
 }
 
 void prev_command_show(){
-    // log_info("entered prev command",COM1);
+   
     if(current_command_counter == 0){
         clear_current_line(BLACK_COL,BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL);      // prints noting now 
         up_pressed_count = 0; 
@@ -296,6 +306,7 @@ void prev_command_show(){
 
     }
 }
+
 
 
 
