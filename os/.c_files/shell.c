@@ -94,6 +94,9 @@ void clear_command_history(){
         command_buffer_clean(command_retriver_array[i],COMMAND_BUFFER_LIMIT_INDEX + 1);
     }
     current_command_counter = 0;
+    next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,false);
+    write_to_screen("command history is cleared",BLACK_COL,WHITE_COL);
+    next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
 
 }
 
@@ -177,15 +180,16 @@ void command_parcer(){
     }
 
     else if(strcmp_d(main_command_buffer, "clear") == true){
-        if(strcmp_d(command_buffer + space +1 , "-b")){
-            clear_command_history();
-        }
-        if(strcmp_d(command_buffer + space +1 , "-b") == false){
-            incorrect_flags("hey this is not a known flag with clear, try help (no flag)");
-        }
-        else{
+        if(space_checker(space) == 1){
             clear_screen(BLACK_COL,WHITE_COL);
         }
+        else if(strcmp_d(command_buffer + space +1 , "-b")){
+            clear_command_history();
+        }
+        else if(strcmp_d(command_buffer + space +1 , "-b") == false){
+            incorrect_flags("hey this is not a known flag with clear, try help (no flag)");
+        }
+       
         
     }
 

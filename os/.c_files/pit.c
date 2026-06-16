@@ -26,7 +26,6 @@ void clock_update(void){
     if(SYSTEM_CLOCK_SECONDS >= 86400){
         USER_CLOCK_SECONDS -= 86400;   // resets after a 24 hr , day will be implemented next (later on)
     }
-    log_info(int_to_string(SYSTEM_CLOCK_MS_WHOLE),COM1);
 
 }
 int get_hr(void){

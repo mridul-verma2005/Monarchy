@@ -27,13 +27,7 @@ int kernel_main(){
     SCREEN_INIT();
     PIT_INIT();
     CMOS_INIT();
-    ENABLE_A_IRQ_LINE(8);
-    while(get_time_set_flag() == false){
-        if(get_time_set_flag() == true){
-            DISABLE_A_IRQ_LINE(8);
-            log_info("IRQ 8 is not disabled",COM1);
-        }
-    }
+    ENABLE_A_IRQ_LINE(8);  
     ENABLE_A_IRQ_LINE(0);
     write_to_screen("type help to get to know the commands ;)",BLACK_COL,WHITE_COL);
     next_line(BLACK_COL,WHITE_COL,BLACK_COL,BLUE_COL,1,true);
