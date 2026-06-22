@@ -27,5 +27,11 @@ SECTIONS {
         bss_end = . ;
     }
 
+    .heap_reserved ALIGN (0X1000) (NOLOAD):{
+        heap_start = .
+        *(.heap_reserved)
+        heap_end = .
+    }
+
    
 }

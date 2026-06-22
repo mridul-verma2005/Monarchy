@@ -9,34 +9,6 @@ int digit_counter(int number){
     return digit;
 }
 
-// char* int_to_string(int number){
-//     int digit;
-//     static char value[3];
-//     value[2] = '\0';
-//     value[1] = ' ';
-//     value[0] = ' ';
-//     if(number == 0){
-//         value[0] = '0';
-//         value[1] = '0';
-//         return value;
-//     }
-        
-//     else{
-//         int i = 1;
-//         while(number > 0 && i >= 0){
-//             digit = number % 10;
-//             value[i] = '0' + digit;
-//             number /= 10;
-//             i--;
-//         }
-//     }
-//     if(value[0] == ' '){
-//         value[0] = '0';
-//     }
-    
-//     return value;
-// }
-
 char* int_to_string(int number){
     static char value[5];
     for(int i = 0 ; i < 5 ; i++){
@@ -104,6 +76,8 @@ void concaternate(char* string_1 , char* string_2 ,char * result){
     result[size_1 + size_2 + 1] = '\0';
 
 }
+
+
 
 bool strcmp_d(char* str1 , char* str2){
     bool is_same = true;
